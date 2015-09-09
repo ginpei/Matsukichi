@@ -71,7 +71,6 @@ namespace AppList
 
         private void AppListForm_Load(object sender, EventArgs e)
         {
-            Visible = false;
             updateAppList();
 
             HotKeyManager.RegisterHotKey(Keys.Space, KeyModifiers.Control);
