@@ -17,6 +17,11 @@ namespace AppList
     using ConsoleHotKey;
     public partial class AppListForm : Form
     {
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
+
         private List<AppInfo> appListCache = new List<AppInfo>();
         private List<AppInfo> selectedAppList = new List<AppInfo>();
         //private GlobalKeyboardListener listener = new GlobalKeyboardListener();
@@ -75,10 +80,8 @@ namespace AppList
         {
             if (e.Modifiers == KeyModifiers.Control && e.Key == Keys.Space)
             {
-                // FIXME: couldn't get focus
                 Visible = true;
-                Focus();
-                filterText.Focus();
+                SetForegroundWindow(Handle);
             }
         }
 
