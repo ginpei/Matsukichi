@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppList", "WindowsFormsApplication2\AppList.csproj", "{D943B5AE-D6C5-48ED-A061-094A0679888F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matsukichi", "Matsukichi\Matsukichi.csproj", "{AE7E6813-9C41-4AD6-8D3C-A36D1460EA77}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{D943B5AE-D6C5-48ED-A061-094A0679888F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D943B5AE-D6C5-48ED-A061-094A0679888F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D943B5AE-D6C5-48ED-A061-094A0679888F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE7E6813-9C41-4AD6-8D3C-A36D1460EA77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE7E6813-9C41-4AD6-8D3C-A36D1460EA77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE7E6813-9C41-4AD6-8D3C-A36D1460EA77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE7E6813-9C41-4AD6-8D3C-A36D1460EA77}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
