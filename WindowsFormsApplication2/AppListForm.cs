@@ -29,6 +29,9 @@ namespace AppList
         public AppListForm()
         {
             InitializeComponent();
+
+            ActiveControl = filterText;
+
         }
 
         private void updateAppList()
