@@ -60,6 +60,7 @@
             this.ClientSize = new System.Drawing.Size(753, 231);
             this.Controls.Add(this.uiFilterText);
             this.Controls.Add(this.uiCommandList);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
