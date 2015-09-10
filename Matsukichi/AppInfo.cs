@@ -121,9 +121,6 @@ namespace Matsukichi
             return false;
         }
 
-        /**
-         * @see http://stackoverflow.com/questions/2315561/correct-way-in-net-to-switch-the-focus-to-another-application
-         */
         public void focus()
         {
             SetForegroundWindow(process.MainWindowHandle);
