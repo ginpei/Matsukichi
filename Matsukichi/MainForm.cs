@@ -21,6 +21,33 @@ namespace Matsukichi
             InitializeComponent();
         }
 
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            updateAppList();
+        }
+
+        private void uiFilterText_TextChanged(object sender, EventArgs e)
+        {
+            filterAppList(uiFilterText.Text);
+
+            if (uiCommandList.Items.Count > 0)
+            {
+                uiCommandList.SelectedIndex = 0;
+            }
+        }
+
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                openApp();
+                e.SuppressKeyPress = true;
+            }
+        }
+    }
+
+    partial class MainForm
+    {
         private void updateAppList()
         {
             appListCache.Clear();
@@ -60,30 +87,6 @@ namespace Matsukichi
             if (uiCommandList.SelectedIndex >= 0)
             {
                 filteredAppList[uiCommandList.SelectedIndex].focus();
-            }
-        }
-
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-            updateAppList();
-        }
-
-        private void uiFilterText_TextChanged(object sender, EventArgs e)
-        {
-            filterAppList(uiFilterText.Text);
-
-            if (uiCommandList.Items.Count > 0)
-            {
-                uiCommandList.SelectedIndex = 0;
-            }
-        }
-
-        private void MainForm_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                openApp();
-                e.SuppressKeyPress = true;
             }
         }
     }
