@@ -13,77 +13,104 @@ namespace Matsukichi
         private static extern bool SetForegroundWindow(IntPtr hWnd);
 
         public Process process;
-        public string processName;
         public string appName;
         public string screenName;
 
         public AppInfo(Process proc)
         {
             process = proc;
-            processName = proc.ProcessName.ToLower();
-            screenName = getAppName(proc);
+
+            string path = getProcPath(proc);
+            screenName = getAppName(path);
             appName = screenName.ToLower();
+        }
+
+        private string getProcPath(Process proc)
+        {
+            // get process information using WMI (Windows Management Instrumentation)
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher(string.Format(
+                "SELECT ProcessId, ExecutablePath " +
+                "FROM Win32_Process " +
+                "WHERE ProcessId LIKE '{0}'",
+                proc.Id.ToString()
+            ));
+            ManagementObjectCollection searchResult = searcher.Get();
+            ManagementObject procData = searchResult.Cast<ManagementObject>().FirstOrDefault();
+
+            string path = (string)procData["ExecutablePath"];
+
+            return path;
+        }
+
+        private string getAppName(string path)
+        {
+            FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(path);
+            string name = myFileVersionInfo.FileDescription;
+
+            return name;
         }
 
         /**
          * @see http://stackoverflow.com/questions/22201752/how-to-get-active-window-app-name-as-shown-in-task-manager
          */
-        private string getAppName(Process p)
-        {
-            string name = "";
-            var processname = p.ProcessName;
-            string fileName = "";
-            int pid = p.Id;
+        #region not used
+        //private string getAppName(Process p)
+        //{
+        //    string name = "";
+        //    var processname = p.ProcessName;
+        //    string fileName = "";
+        //    int pid = p.Id;
 
-            if (String.IsNullOrEmpty(processname))
-            {
-                return "";
-            }
+        //    if (String.IsNullOrEmpty(processname))
+        //    {
+        //        return "";
+        //    }
 
-            switch (processname)
-            {
-                case "explorer": //metro processes
-                case "WWAHost":
-                    return "";
-                default:
-                    break;
-            }
-            string wmiQuery = string.Format("SELECT ProcessId, ExecutablePath FROM Win32_Process WHERE ProcessId LIKE '{0}'", pid.ToString());
-            var pro = new ManagementObjectSearcher(wmiQuery).Get().Cast<ManagementObject>().FirstOrDefault();
-            fileName = (string)pro["ExecutablePath"];
+        //    switch (processname)
+        //    {
+        //        case "explorer": //metro processes
+        //        case "WWAHost":
+        //            return "";
+        //        default:
+        //            break;
+        //    }
+        //    string wmiQuery = string.Format("SELECT ProcessId, ExecutablePath FROM Win32_Process WHERE ProcessId LIKE '{0}'", pid.ToString());
+        //    var pro = new ManagementObjectSearcher(wmiQuery).Get().Cast<ManagementObject>().FirstOrDefault();
+        //    fileName = (string)pro["ExecutablePath"];
 
-            if (String.IsNullOrEmpty(fileName))
-            {
-                return "";
-            }
+        //    if (String.IsNullOrEmpty(fileName))
+        //    {
+        //        return "";
+        //    }
 
-            FileVersionInfo myFileVersionInfo;
-            try
-            {
-                // Get the file version
-                myFileVersionInfo = FileVersionInfo.GetVersionInfo(fileName);
-            }
-            catch
-            {
-                return "";
-            }
+        //    FileVersionInfo myFileVersionInfo;
+        //    try
+        //    {
+        //        // Get the file version
+        //        myFileVersionInfo = FileVersionInfo.GetVersionInfo(fileName);
+        //    }
+        //    catch
+        //    {
+        //        return "";
+        //    }
 
-            // Get the file description
-            name = myFileVersionInfo.FileDescription;
-            //if (name == "")
-            //    name = GetTitle(handle);
+        //    // Get the file description
+        //    name = myFileVersionInfo.FileDescription;
+        //    //if (name == "")
+        //    //    name = GetTitle(handle);
 
-            if (String.IsNullOrEmpty(name))
-            {
-                return "";
-            }
+        //    if (String.IsNullOrEmpty(name))
+        //    {
+        //        return "";
+        //    }
 
-            return name;
-        }
+        //    return name;
+        //}
+        #endregion
 
         public bool isMatch(string filter)
         {
-            if (appName.IndexOf(filter.ToLower()) >= 0 || processName.IndexOf(filter.ToLower()) >= 0)
+            if (appName.IndexOf(filter.ToLower()) >= 0 || process.ProcessName.IndexOf(filter.ToLower()) >= 0)
             {
                 return true;
             }
