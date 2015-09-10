@@ -1,6 +1,6 @@
 ﻿namespace Matsukichi
 {
-    partial class uiMainForm
+    partial class MainForm
     {
         /// <summary>
         /// 必要なデザイナー変数です。
@@ -51,7 +51,7 @@
             this.uiCommandList.Size = new System.Drawing.Size(729, 148);
             this.uiCommandList.TabIndex = 1;
             // 
-            // uiMainForm
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -60,11 +60,11 @@
             this.Controls.Add(this.uiCommandList);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "uiMainForm";
+            this.Name = "MainForm";
             this.ShowInTaskbar = false;
             this.Text = "Matsukichi";
             this.TopMost = true;
-            this.Load += new System.EventHandler(this.uiMainForm_Load);
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

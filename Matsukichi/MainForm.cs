@@ -11,12 +11,12 @@ using System.Diagnostics;  // Process
 
 namespace Matsukichi
 {
-    public partial class uiMainForm : Form
+    public partial class MainForm : Form
     {
         private List<AppInfo> appListCache = new List<AppInfo>();
         private List<AppInfo> filteredAppList = new List<AppInfo>();
 
-        public uiMainForm()
+        public MainForm()
         {
             InitializeComponent();
         }
@@ -55,7 +55,7 @@ namespace Matsukichi
             }
         }
 
-        private void uiMainForm_Load(object sender, EventArgs e)
+        private void MainForm_Load(object sender, EventArgs e)
         {
             updateAppList();
         }
