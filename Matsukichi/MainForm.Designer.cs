@@ -41,6 +41,7 @@
             this.uiFilterText.Name = "uiFilterText";
             this.uiFilterText.Size = new System.Drawing.Size(729, 51);
             this.uiFilterText.TabIndex = 0;
+            this.uiFilterText.TextChanged += new System.EventHandler(this.uiFilterText_TextChanged);
             // 
             // uiCommandList
             // 

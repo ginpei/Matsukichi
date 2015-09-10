@@ -59,5 +59,15 @@ namespace Matsukichi
         {
             updateAppList();
         }
+
+        private void uiFilterText_TextChanged(object sender, EventArgs e)
+        {
+            filterAppList(uiFilterText.Text);
+
+            if (uiCommandList.Items.Count > 0)
+            {
+                uiCommandList.SelectedIndex = 0;
+            }
+        }
     }
 }
