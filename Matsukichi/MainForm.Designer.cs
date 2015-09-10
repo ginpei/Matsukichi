@@ -64,6 +64,7 @@
             this.ShowInTaskbar = false;
             this.Text = "Matsukichi";
             this.TopMost = true;
+            this.Load += new System.EventHandler(this.uiMainForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
