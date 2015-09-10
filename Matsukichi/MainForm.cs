@@ -128,7 +128,7 @@ namespace Matsukichi
                 }
             }
 
-            filterAppList("");
+            filterAppList(uiFilterText.Text);
         }
 
         private void filterAppList(string filter)
@@ -143,6 +143,11 @@ namespace Matsukichi
                     filteredAppList.Add(app);
                     uiCommandList.Items.Add(app.screenName);
                 }
+            }
+
+            if (uiCommandList.Items.Count > 0)
+            {
+                uiCommandList.SelectedIndex = 0;
             }
         }
 
