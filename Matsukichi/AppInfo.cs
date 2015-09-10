@@ -110,7 +110,7 @@ namespace Matsukichi
 
         public bool isMatch(string filter)
         {
-            if (appName.IndexOf(filter.ToLower()) >= 0 || process.ProcessName.IndexOf(filter.ToLower()) >= 0)
+            if (appName.IndexOf(filter.ToLower()) >= 0 || process.ProcessName.IndexOf(filter.ToLower()) >= 0 || process.MainWindowTitle.ToLower().IndexOf(filter.ToLower()) >= 0)
             {
                 return true;
             }
