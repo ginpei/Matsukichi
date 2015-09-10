@@ -80,6 +80,7 @@ namespace Matsukichi
         {
             if (e.Modifiers == KeyModifiers.Control && e.Key == Keys.Space)
             {
+                updateAppList();
                 show();
             }
         }
