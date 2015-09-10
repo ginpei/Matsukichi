@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Diagnostics;  // Process
 using System.Management;  // ManagementObjectSearcher (System.Management.dll)
 using System.Runtime.InteropServices;  // DllImport
