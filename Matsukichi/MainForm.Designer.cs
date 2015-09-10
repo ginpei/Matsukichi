@@ -46,18 +46,21 @@
             // 
             // uiCommandList
             // 
+            this.uiCommandList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.uiCommandList.FormattingEnabled = true;
             this.uiCommandList.ItemHeight = 18;
             this.uiCommandList.Location = new System.Drawing.Point(12, 69);
             this.uiCommandList.Name = "uiCommandList";
-            this.uiCommandList.Size = new System.Drawing.Size(729, 148);
+            this.uiCommandList.Size = new System.Drawing.Size(729, 94);
             this.uiCommandList.TabIndex = 1;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(753, 231);
+            this.ClientSize = new System.Drawing.Size(753, 175);
             this.Controls.Add(this.uiFilterText);
             this.Controls.Add(this.uiCommandList);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
