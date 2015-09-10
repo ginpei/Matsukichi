@@ -114,10 +114,7 @@ namespace Matsukichi
                 if (AppInfo.isValid(p))
                 {
                     AppInfo app = new AppInfo(p);
-                    if (app.screenName.Length > 0)
-                    {
-                        appListCache.Add(app);
-                    }
+                    appListCache.Add(app);
                 }
             }
 
