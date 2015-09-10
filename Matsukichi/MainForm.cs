@@ -65,6 +65,8 @@ namespace Matsukichi
             if (e.KeyCode == Keys.Enter)
             {
                 openApp();
+                uiFilterText.Text = "";
+                hide();
                 e.SuppressKeyPress = true;
             }
             else if (e.KeyCode == Keys.Escape)
