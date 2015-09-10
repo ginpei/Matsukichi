@@ -70,6 +70,14 @@ namespace Matsukichi
             }
         }
 
+        private void uiCommandList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            AppInfo info = filteredAppList[uiCommandList.SelectedIndex];
+            Icon icon = Icon.ExtractAssociatedIcon(info.path);
+            Bitmap bitmap = Bitmap.FromHicon(icon.Handle);
+            uiIconPlace.Image = bitmap;
+        }
+
         private void uiFilterText_TextChanged(object sender, EventArgs e)
         {
             filterAppList(uiFilterText.Text);
@@ -162,14 +170,6 @@ namespace Matsukichi
             }
             uiFilterText.Text = "";
             hide();
-        }
-
-        private void uiCommandList_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            AppInfo info = filteredAppList[uiCommandList.SelectedIndex];
-            Icon icon = Icon.ExtractAssociatedIcon(info.path);
-            Bitmap bitmap = Bitmap.FromHicon(icon.Handle);
-            uiIconPlace.Image = bitmap;
         }
     }
 }
