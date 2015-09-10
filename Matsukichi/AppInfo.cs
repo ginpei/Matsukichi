@@ -13,6 +13,7 @@ namespace Matsukichi
         private static extern bool SetForegroundWindow(IntPtr hWnd);
 
         public Process process;
+        public string path;
         public string appName;
         public string screenName;
 
@@ -20,7 +21,7 @@ namespace Matsukichi
         {
             process = proc;
 
-            string path = getProcPath(proc);
+            path = getProcPath(proc);
             screenName = getAppName(path);
             appName = screenName.ToLower();
         }

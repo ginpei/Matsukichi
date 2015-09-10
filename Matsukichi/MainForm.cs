@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Diagnostics;  // Process
 using System.Runtime.InteropServices;  // DllImport
+using System.Drawing;
 
 namespace Matsukichi
 {
@@ -31,6 +32,7 @@ namespace Matsukichi
         {
             Visible = true;
             SetForegroundWindow(Handle);
+            uiIconPlace.Image = null;
             uiCommandList.Items.Clear();
             updateAppList();
         }
@@ -160,6 +162,14 @@ namespace Matsukichi
             }
             uiFilterText.Text = "";
             hide();
+        }
+
+        private void uiCommandList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            AppInfo info = filteredAppList[uiCommandList.SelectedIndex];
+            Icon icon = Icon.ExtractAssociatedIcon(info.path);
+            Bitmap bitmap = Bitmap.FromHicon(icon.Handle);
+            uiIconPlace.Image = bitmap;
         }
     }
 }

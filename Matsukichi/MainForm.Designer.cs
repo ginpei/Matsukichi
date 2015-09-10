@@ -30,6 +30,8 @@
         {
             this.uiFilterText = new System.Windows.Forms.TextBox();
             this.uiCommandList = new System.Windows.Forms.ListBox();
+            this.uiIconPlace = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.uiIconPlace)).BeginInit();
             this.SuspendLayout();
             // 
             // uiFilterText
@@ -37,9 +39,9 @@
             this.uiFilterText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.uiFilterText.Font = new System.Drawing.Font("MS UI Gothic", 22F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.uiFilterText.Location = new System.Drawing.Point(12, 12);
+            this.uiFilterText.Location = new System.Drawing.Point(68, 12);
             this.uiFilterText.Name = "uiFilterText";
-            this.uiFilterText.Size = new System.Drawing.Size(729, 51);
+            this.uiFilterText.Size = new System.Drawing.Size(673, 51);
             this.uiFilterText.TabIndex = 0;
             this.uiFilterText.TextChanged += new System.EventHandler(this.uiFilterText_TextChanged);
             this.uiFilterText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.uiFilterText_KeyDown);
@@ -55,12 +57,23 @@
             this.uiCommandList.Name = "uiCommandList";
             this.uiCommandList.Size = new System.Drawing.Size(729, 94);
             this.uiCommandList.TabIndex = 1;
+            this.uiCommandList.SelectedIndexChanged += new System.EventHandler(this.uiCommandList_SelectedIndexChanged);
+            // 
+            // uiIconPlace
+            // 
+            this.uiIconPlace.ImageLocation = "";
+            this.uiIconPlace.Location = new System.Drawing.Point(12, 12);
+            this.uiIconPlace.Name = "uiIconPlace";
+            this.uiIconPlace.Size = new System.Drawing.Size(50, 50);
+            this.uiIconPlace.TabIndex = 2;
+            this.uiIconPlace.TabStop = false;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(753, 175);
+            this.Controls.Add(this.uiIconPlace);
             this.Controls.Add(this.uiFilterText);
             this.Controls.Add(this.uiCommandList);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -74,6 +87,7 @@
             this.TopMost = true;
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
+            ((System.ComponentModel.ISupportInitialize)(this.uiIconPlace)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -83,6 +97,7 @@
 
         private System.Windows.Forms.TextBox uiFilterText;
         private System.Windows.Forms.ListBox uiCommandList;
+        private System.Windows.Forms.PictureBox uiIconPlace;
     }
 }
 
