@@ -111,7 +111,7 @@ namespace Matsukichi
 
             foreach (Process p in Process.GetProcesses())
             {
-                if (p.MainWindowTitle.Length != 0)
+                if (AppInfo.isValid(p))
                 {
                     AppInfo app = new AppInfo(p);
                     if (app.screenName.Length > 0)

@@ -125,5 +125,10 @@ namespace Matsukichi
         {
             SetForegroundWindow(process.MainWindowHandle);
         }
+
+        static public bool isValid(Process proc)
+        {
+            return (proc.MainWindowTitle.Length != 0);
+        }
     }
 }
