@@ -31,6 +31,8 @@ namespace Matsukichi
         {
             Visible = true;
             SetForegroundWindow(Handle);
+            uiCommandList.Items.Clear();
+            updateAppList();
         }
 
         private void hide()
@@ -53,7 +55,15 @@ namespace Matsukichi
             }
             else if (e.KeyCode == Keys.Escape)
             {
-                hide();
+                if (uiFilterText.Text.Length > 0)
+                {
+                    uiFilterText.Text = "";
+                    uiFilterText.Focus();
+                }
+                else
+                {
+                    hide();
+                }
                 e.SuppressKeyPress = true;
             }
         }
@@ -91,7 +101,6 @@ namespace Matsukichi
         {
             if (e.Modifiers == KeyModifiers.Control && e.Key == Keys.Space)
             {
-                updateAppList();
                 show();
             }
         }
