@@ -55,6 +55,14 @@ namespace Matsukichi
             }
         }
 
+        private void openApp()
+        {
+            if (uiCommandList.SelectedIndex >= 0)
+            {
+                filteredAppList[uiCommandList.SelectedIndex].focus();
+            }
+        }
+
         private void MainForm_Load(object sender, EventArgs e)
         {
             updateAppList();
@@ -67,6 +75,15 @@ namespace Matsukichi
             if (uiCommandList.Items.Count > 0)
             {
                 uiCommandList.SelectedIndex = 0;
+            }
+        }
+
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                openApp();
+                e.SuppressKeyPress = true;
             }
         }
     }

@@ -59,6 +59,7 @@
             this.ClientSize = new System.Drawing.Size(753, 231);
             this.Controls.Add(this.uiFilterText);
             this.Controls.Add(this.uiCommandList);
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MainForm";
@@ -66,6 +67,7 @@
             this.Text = "Matsukichi";
             this.TopMost = true;
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
 
