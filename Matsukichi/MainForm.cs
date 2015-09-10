@@ -84,10 +84,7 @@ namespace Matsukichi
                 show();
             }
         }
-    }
 
-    partial class MainForm
-    {
         private void updateAppList()
         {
             appListCache.Clear();
