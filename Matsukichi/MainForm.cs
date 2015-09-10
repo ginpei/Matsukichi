@@ -8,11 +8,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;  // Process
+using System.Runtime.InteropServices;  // DllImport
 
 namespace Matsukichi
 {
     public partial class MainForm : Form
     {
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
+
         private List<AppInfo> appListCache = new List<AppInfo>();
         private List<AppInfo> filteredAppList = new List<AppInfo>();
 
@@ -21,8 +26,27 @@ namespace Matsukichi
             InitializeComponent();
         }
 
+        private void registerHotkeys()
+        {
+            GlobalHotkeyManager.RegisterHotKey(Keys.Space, KeyModifiers.Control);
+            GlobalHotkeyManager.HotKeyPressed += new EventHandler<HotKeyEventArgs>(GlobalHotkeyManager_HotKeyPressed);
+            CheckForIllegalCrossThreadCalls = false;  // FIXME
+        }
+
+        private void show()
+        {
+            Visible = true;
+            SetForegroundWindow(Handle);
+        }
+
+        private void hide()
+        {
+            Visible = false;
+        }
+
         private void MainForm_Load(object sender, EventArgs e)
         {
+            registerHotkeys();
             updateAppList();
         }
 
@@ -42,6 +66,19 @@ namespace Matsukichi
             {
                 openApp();
                 e.SuppressKeyPress = true;
+            }
+            else if (e.KeyCode == Keys.Escape)
+            {
+                hide();
+                e.SuppressKeyPress = true;
+            }
+        }
+
+        public void GlobalHotkeyManager_HotKeyPressed(object sender, HotKeyEventArgs e)
+        {
+            if (e.Modifiers == KeyModifiers.Control && e.Key == Keys.Space)
+            {
+                show();
             }
         }
     }
