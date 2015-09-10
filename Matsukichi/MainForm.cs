@@ -50,16 +50,6 @@ namespace Matsukichi
             updateAppList();
         }
 
-        private void uiFilterText_TextChanged(object sender, EventArgs e)
-        {
-            filterAppList(uiFilterText.Text);
-
-            if (uiCommandList.Items.Count > 0)
-            {
-                uiCommandList.SelectedIndex = 0;
-            }
-        }
-
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -73,6 +63,16 @@ namespace Matsukichi
             {
                 hide();
                 e.SuppressKeyPress = true;
+            }
+        }
+
+        private void uiFilterText_TextChanged(object sender, EventArgs e)
+        {
+            filterAppList(uiFilterText.Text);
+
+            if (uiCommandList.Items.Count > 0)
+            {
+                uiCommandList.SelectedIndex = 0;
             }
         }
 
