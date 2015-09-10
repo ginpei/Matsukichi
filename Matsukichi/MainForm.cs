@@ -55,8 +55,6 @@ namespace Matsukichi
             if (e.KeyCode == Keys.Enter)
             {
                 openApp();
-                uiFilterText.Text = "";
-                hide();
                 e.SuppressKeyPress = true;
             }
             else if (e.KeyCode == Keys.Escape)
@@ -73,6 +71,25 @@ namespace Matsukichi
             if (uiCommandList.Items.Count > 0)
             {
                 uiCommandList.SelectedIndex = 0;
+            }
+        }
+
+        private void uiFilterText_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Up || (e.Control && e.KeyCode == Keys.K))
+            {
+                selectPrevCommand();
+                e.SuppressKeyPress = true;
+            }
+            else if (e.KeyCode == Keys.Down || (e.Control && e.KeyCode == Keys.J))
+            {
+                selectNextCommand();
+                e.SuppressKeyPress = true;
+            }
+            else if (e.Control && e.KeyCode == Keys.M)
+            {
+                openApp();
+                e.SuppressKeyPress = true;
             }
         }
 
@@ -119,12 +136,30 @@ namespace Matsukichi
             }
         }
 
+        private void selectPrevCommand()
+        {
+            if (uiCommandList.SelectedIndex > 0)
+            {
+                uiCommandList.SelectedIndex--;
+            }
+        }
+
+        private void selectNextCommand()
+        {
+            if (uiCommandList.SelectedIndex < uiCommandList.Items.Count - 1)
+            {
+                uiCommandList.SelectedIndex++;
+            }
+        }
+
         private void openApp()
         {
             if (uiCommandList.SelectedIndex >= 0)
             {
                 filteredAppList[uiCommandList.SelectedIndex].focus();
             }
+            uiFilterText.Text = "";
+            hide();
         }
     }
 }

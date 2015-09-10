@@ -42,6 +42,7 @@
             this.uiFilterText.Size = new System.Drawing.Size(729, 51);
             this.uiFilterText.TabIndex = 0;
             this.uiFilterText.TextChanged += new System.EventHandler(this.uiFilterText_TextChanged);
+            this.uiFilterText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.uiFilterText_KeyDown);
             // 
             // uiCommandList
             // 
