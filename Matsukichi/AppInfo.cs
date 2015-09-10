@@ -5,12 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;  // Process
 using System.Management;  // ManagementObjectSearcher (System.Management.dll)
-using System.Windows.Automation;  // AutomationElement (UIAutomationClient.dll)
+using System.Runtime.InteropServices;  // DllImport
 
 namespace Matsukichi
 {
     public partial class AppInfo
     {
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
+
         public Process process;
         public string processName;
         public string appName;
@@ -95,12 +99,7 @@ namespace Matsukichi
          */
         public void focus()
         {
-            // TODO: search apps which throws an error on SetFocus
-            AutomationElement element = AutomationElement.FromHandle(process.MainWindowHandle);
-            if (element != null)
-            {
-                element.SetFocus();
-            }
+            SetForegroundWindow(process.MainWindowHandle);
         }
     }
 }
