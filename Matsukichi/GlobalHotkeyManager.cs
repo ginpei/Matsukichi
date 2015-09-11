@@ -3,7 +3,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;  // DllImport
 
 // http://stackoverflow.com/questions/3654787/global-hotkey-in-console-application
-namespace Matsukichi
+namespace Matsukichi.GlobalHotkey
 {
     using System.Threading;
 

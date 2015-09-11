@@ -7,6 +7,8 @@ using System.Drawing;
 
 namespace Matsukichi
 {
+    using GlobalHotkey;
+
     public partial class MainForm : Form
     {
         [DllImport("user32.dll")]
