@@ -23,6 +23,16 @@ namespace Matsukichi
 
             path = getProcPath(proc);
             screenName = getAppName(path);
+            if (!String.IsNullOrEmpty(screenName))
+            {
+                appName = screenName.ToLower();
+            }
+        }
+
+        public AppInfo(string path)
+        {
+            this.path = path;
+            screenName = getAppName(path);
             appName = screenName.ToLower();
         }
 
@@ -45,10 +55,18 @@ namespace Matsukichi
 
         private string getAppName(string path)
         {
-            FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(path);
-            string name = myFileVersionInfo.FileDescription;
+            try
+            {
+                // 'System.IO.FileNotFoundException' when path is "C:\\WINDOWS\\system32\\ApplicationFrameHost.exe"
+                FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(path);
+                string name = myFileVersionInfo.FileDescription;
 
-            return name;
+                return name;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         /**
