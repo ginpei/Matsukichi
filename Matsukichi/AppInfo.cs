@@ -23,7 +23,7 @@ namespace Matsukichi
 
             path = getProcPath(proc);
             screenName = getAppName(path);
-            if (!String.IsNullOrEmpty(screenName))
+            if (!string.IsNullOrEmpty(screenName))
             {
                 appName = screenName.ToLower();
             }
