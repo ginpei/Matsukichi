@@ -121,6 +121,15 @@ namespace Matsukichi
         {
             appListCache.Clear();
 
+            updateCurrentAppList();
+
+            updateInstalledAppList();
+
+            filterAppList(uiFilterText.Text);
+        }
+
+        private void updateCurrentAppList()
+        {
             foreach (Process p in Process.GetProcesses())
             {
                 if (AppInfo.isValid(p))
@@ -132,7 +141,10 @@ namespace Matsukichi
                     }
                 }
             }
+        }
 
+        private static void updateInstalledAppList()
+        {
             string registry_key = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
             using (Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(registry_key))
             {
@@ -144,8 +156,6 @@ namespace Matsukichi
                     }
                 }
             }
-
-            filterAppList(uiFilterText.Text);
         }
 
         private void filterAppList(string filter)
