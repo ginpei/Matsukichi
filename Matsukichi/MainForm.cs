@@ -119,6 +119,8 @@ namespace Matsukichi
 
         private void updateAppList()
         {
+            uiCommandList.Items.Add("(updating...)");
+
             appListCache.Clear();
 
             updateCurrentAppList();
