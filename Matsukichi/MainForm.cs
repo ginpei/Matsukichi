@@ -151,8 +151,6 @@ namespace Matsukichi
             // get all paths of link
             addAppsFromShortcuts(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu));
             addAppsFromShortcuts(Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu));
-
-            // TODO: use shortcut's filename as screen name
         }
 
         private void addAppsFromShortcuts(string dir)
@@ -162,44 +160,9 @@ namespace Matsukichi
             // add apps to the list if a link heads to an exe file
             foreach (string linkPath in lnkPaths)
             {
-                string exePath;
-                try
-                {
-                    // error for "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Adobe Creative Cloud.lnk"
-                    exePath = getPathFromShortcut(linkPath);
-                }
-                catch
-                {
-                    continue;
-                }
-
-                if (exePath.EndsWith(".exe") && !exePath.ToLower().Contains("uninstall"))
-                {
-                    AppInfo app = new AppInfo(exePath);
-                    if (!String.IsNullOrEmpty(app.screenName))
-                    {
-                        appListCache.Add(app);
-                    }
-                }
+                AppInfo app = new AppInfo(linkPath);
+                appListCache.Add(app);
             }
-        }
-
-        private string getPathFromShortcut(string shortcutFilename)
-        {
-            string pathOnly = System.IO.Path.GetDirectoryName(shortcutFilename);
-            string filenameOnly = System.IO.Path.GetFileName(shortcutFilename);
-
-            Shell32.Shell shell = new Shell32.Shell();
-            Shell32.Folder folder = shell.NameSpace(pathOnly);
-            Shell32.FolderItem folderItem = folder.ParseName(filenameOnly);
-            if (folderItem != null)
-            {
-                Shell32.ShellLinkObject link =
-                (Shell32.ShellLinkObject)folderItem.GetLink;
-                return link.Path;
-            }
-
-            return string.Empty;
         }
 
         private void filterAppList(string filter)

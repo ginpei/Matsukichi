@@ -58,11 +58,20 @@ namespace Matsukichi
 
         private string getAppName(string path)
         {
+            string name = null;
+
+            if (path.EndsWith(".lnk"))
+            {
+                name = System.IO.Path.GetFileName(path);
+                name = name.Substring(0, name.Length - 4);
+                return name;
+            }
+
             try
             {
                 // 'System.IO.FileNotFoundException' when path is "C:\\WINDOWS\\system32\\ApplicationFrameHost.exe"
                 FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(path);
-                string name = myFileVersionInfo.FileDescription;
+                name = myFileVersionInfo.FileDescription;
 
                 return name;
             }
@@ -147,7 +156,16 @@ namespace Matsukichi
 
         public void focus()
         {
-            SetForegroundWindow(process.MainWindowHandle);
+            if (process == null)
+            {
+                Process proc = new Process();
+                proc.StartInfo.FileName = path;
+                proc.Start();
+            }
+            else
+            {
+                SetForegroundWindow(process.MainWindowHandle);
+            }
         }
 
         static public bool isValid(Process proc)
