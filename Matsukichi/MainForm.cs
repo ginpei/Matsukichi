@@ -149,14 +149,30 @@ namespace Matsukichi
         private void updateInstalledAppList()
         {
             // get all paths of link
-            //string startMenuPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu);
-            string startMenuPath = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu);
-            string[] lnkPaths = Directory.GetFiles(startMenuPath+"\\Programs", "*.lnk", SearchOption.AllDirectories);
+            addAppsFromShortcuts(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu));
+            addAppsFromShortcuts(Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu));
+
+            // TODO: use shortcut's filename as screen name
+        }
+
+        private void addAppsFromShortcuts(string dir)
+        {
+            string[] lnkPaths = Directory.GetFiles(dir + "\\Programs", "*.lnk", SearchOption.AllDirectories);
 
             // add apps to the list if a link heads to an exe file
             foreach (string linkPath in lnkPaths)
             {
-                string exePath = getPathFromShortcut(linkPath);
+                string exePath;
+                try
+                {
+                    // error for "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Adobe Creative Cloud.lnk"
+                    exePath = getPathFromShortcut(linkPath);
+                }
+                catch
+                {
+                    continue;
+                }
+
                 if (exePath.EndsWith(".exe") && !exePath.ToLower().Contains("uninstall"))
                 {
                     AppInfo app = new AppInfo(exePath);
