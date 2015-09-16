@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using System.Diagnostics;  // Process
 using System.Runtime.InteropServices;  // DllImport
 using System.Drawing;
+using System.IO;
 
 namespace Matsukichi
 {
@@ -150,7 +151,7 @@ namespace Matsukichi
             // get all paths of link
             //string startMenuPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu);
             string startMenuPath = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu);
-            string[] lnkPaths = System.IO.Directory.GetFiles(startMenuPath+"\\Programs", "*.lnk", System.IO.SearchOption.AllDirectories);
+            string[] lnkPaths = Directory.GetFiles(startMenuPath+"\\Programs", "*.lnk", SearchOption.AllDirectories);
 
             // add apps to the list if a link heads to an exe file
             foreach (string linkPath in lnkPaths)
