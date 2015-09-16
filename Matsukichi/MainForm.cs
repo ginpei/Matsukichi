@@ -147,17 +147,9 @@ namespace Matsukichi
 
         private static void updateInstalledAppList()
         {
-            string registry_key = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
-            using (Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(registry_key))
-            {
-                foreach (string subkey_name in key.GetSubKeyNames())
-                {
-                    using (Microsoft.Win32.RegistryKey subkey = key.OpenSubKey(subkey_name))
-                    {
-                        Console.WriteLine(subkey.GetValue("DisplayName"));
-                    }
-                }
-            }
+            // FIXME
+            // The approach that is getting app list from uninstaller information in register
+            // doesn't work because they don't have exe files' path.
         }
 
         private void filterAppList(string filter)
