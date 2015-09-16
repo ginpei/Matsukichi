@@ -33,7 +33,10 @@ namespace Matsukichi
         {
             this.path = path;
             screenName = getAppName(path);
-            appName = screenName.ToLower();
+            if (!string.IsNullOrEmpty(screenName))
+            {
+                appName = screenName.ToLower();
+            }
         }
 
         private string getProcPath(Process proc)
@@ -131,8 +134,10 @@ namespace Matsukichi
         {
             if (
                 appName.IndexOf(filter.ToLower()) >= 0 ||
-                process.ProcessName.IndexOf(filter.ToLower()) >= 0 ||
-                process.MainWindowTitle.ToLower().IndexOf(filter.ToLower()) >= 0
+                (process != null &&
+                    (process.ProcessName.IndexOf(filter.ToLower()) >= 0 ||
+                    process.MainWindowTitle.ToLower().IndexOf(filter.ToLower()) >= 0)
+                )
             ) {
                 return true;
             }

@@ -156,19 +156,34 @@ namespace Matsukichi
             // add apps to the list if a link heads to an exe file
             foreach (string linkPath in lnkPaths)
             {
-                Debug.WriteLine(linkPath);
-
-                //string exePath = "getPathFromTheLink";  // FIXME
-                //bool thePathHeadsToExe = false;  // FIXME
-                //if (thePathHeadsToExe)
-                //{
-                //    AppInfo app = new AppInfo(exePath);
-                //    if (!String.IsNullOrEmpty(app.screenName))
-                //    {
-                //        appListCache.Add(app);
-                //    }
-                //}
+                string exePath = getPathFromShortcut(linkPath);
+                if (exePath.EndsWith(".exe") && !exePath.ToLower().Contains("uninstall"))
+                {
+                    AppInfo app = new AppInfo(exePath);
+                    if (!String.IsNullOrEmpty(app.screenName))
+                    {
+                        appListCache.Add(app);
+                    }
+                }
             }
+        }
+
+        private string getPathFromShortcut(string shortcutFilename)
+        {
+            string pathOnly = System.IO.Path.GetDirectoryName(shortcutFilename);
+            string filenameOnly = System.IO.Path.GetFileName(shortcutFilename);
+
+            Shell32.Shell shell = new Shell32.Shell();
+            Shell32.Folder folder = shell.NameSpace(pathOnly);
+            Shell32.FolderItem folderItem = folder.ParseName(filenameOnly);
+            if (folderItem != null)
+            {
+                Shell32.ShellLinkObject link =
+                (Shell32.ShellLinkObject)folderItem.GetLink;
+                return link.Path;
+            }
+
+            return string.Empty;
         }
 
         private void filterAppList(string filter)
