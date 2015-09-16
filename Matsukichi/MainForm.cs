@@ -147,9 +147,27 @@ namespace Matsukichi
 
         private static void updateInstalledAppList()
         {
-            // FIXME
-            // The approach that is getting app list from uninstaller information in register
-            // doesn't work because they don't have exe files' path.
+            // get all paths of link
+            //string startMenuPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu);
+            string startMenuPath = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu);
+            string[] lnkPaths = System.IO.Directory.GetFiles(startMenuPath+"\\Programs", "*.lnk", System.IO.SearchOption.AllDirectories);
+
+            // add apps to the list if a link heads to an exe file
+            foreach (string linkPath in lnkPaths)
+            {
+                Debug.WriteLine(linkPath);
+
+                //string exePath = "getPathFromTheLink";  // FIXME
+                //bool thePathHeadsToExe = false;  // FIXME
+                //if (thePathHeadsToExe)
+                //{
+                //    AppInfo app = new AppInfo(exePath);
+                //    if (!String.IsNullOrEmpty(app.screenName))
+                //    {
+                //        appListCache.Add(app);
+                //    }
+                //}
+            }
         }
 
         private void filterAppList(string filter)
