@@ -145,7 +145,7 @@ namespace Matsukichi
             }
         }
 
-        private static void updateInstalledAppList()
+        private void updateInstalledAppList()
         {
             // get all paths of link
             //string startMenuPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu);
