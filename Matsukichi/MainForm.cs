@@ -31,16 +31,16 @@ namespace Matsukichi
             CheckForIllegalCrossThreadCalls = false;  // FIXME
         }
 
-        private void show()
+        private void Show()
         {
             Visible = true;
             SetForegroundWindow(Handle);
             uiIconPlace.Image = null;
             uiCommandList.Items.Clear();
-            updateAppList();
+            UpdateAppList();
         }
 
-        private void hide()
+        private void Hide()
         {
             Visible = false;
         }
@@ -48,14 +48,14 @@ namespace Matsukichi
         private void MainForm_Load(object sender, EventArgs e)
         {
             registerHotkeys();
-            updateAppList();
+            UpdateAppList();
         }
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
-                openApp();
+                OpenApp();
                 e.SuppressKeyPress = true;
             }
             else if (e.KeyCode == Keys.Escape)
@@ -67,7 +67,7 @@ namespace Matsukichi
                 }
                 else
                 {
-                    hide();
+                    Hide();
                 }
                 e.SuppressKeyPress = true;
             }
@@ -83,7 +83,7 @@ namespace Matsukichi
 
         private void uiFilterText_TextChanged(object sender, EventArgs e)
         {
-            filterAppList(uiFilterText.Text);
+            FilterAppList(uiFilterText.Text);
 
             if (uiCommandList.Items.Count > 0)
             {
@@ -95,17 +95,17 @@ namespace Matsukichi
         {
             if (e.KeyCode == Keys.Up || (e.Control && e.KeyCode == Keys.K))
             {
-                selectPrevCommand();
+                SelectPrevCommand();
                 e.SuppressKeyPress = true;
             }
             else if (e.KeyCode == Keys.Down || (e.Control && e.KeyCode == Keys.J))
             {
-                selectNextCommand();
+                SelectNextCommand();
                 e.SuppressKeyPress = true;
             }
             else if (e.Control && e.KeyCode == Keys.M)
             {
-                openApp();
+                OpenApp();
                 e.SuppressKeyPress = true;
             }
         }
@@ -114,28 +114,28 @@ namespace Matsukichi
         {
             if (e.Modifiers == KeyModifiers.Control && e.Key == Keys.Space)
             {
-                show();
+                Show();
             }
         }
 
-        private void updateAppList()
+        private void UpdateAppList()
         {
             uiCommandList.Items.Add("(updating...)");
 
             appListCache.Clear();
 
-            updateCurrentAppList();
+            UpdateCurrentAppList();
 
-            updateInstalledAppList();
+            UpdateInstalledAppList();
 
-            filterAppList(uiFilterText.Text);
+            FilterAppList(uiFilterText.Text);
         }
 
-        private void updateCurrentAppList()
+        private void UpdateCurrentAppList()
         {
             foreach (Process p in Process.GetProcesses())
             {
-                if (AppInfo.isValid(p))
+                if (AppInfo.IsValid(p))
                 {
                     AppInfo app = new AppInfo(p);
                     if (!String.IsNullOrEmpty(app.screenName))
@@ -146,14 +146,14 @@ namespace Matsukichi
             }
         }
 
-        private void updateInstalledAppList()
+        private void UpdateInstalledAppList()
         {
             // get all paths of link
-            addAppsFromShortcuts(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu));
-            addAppsFromShortcuts(Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu));
+            AddAppsFromShortcuts(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu));
+            AddAppsFromShortcuts(Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu));
         }
 
-        private void addAppsFromShortcuts(string dir)
+        private void AddAppsFromShortcuts(string dir)
         {
             string[] lnkPaths = Directory.GetFiles(dir + "\\Programs", "*.lnk", SearchOption.AllDirectories);
 
@@ -165,14 +165,14 @@ namespace Matsukichi
             }
         }
 
-        private void filterAppList(string filter)
+        private void FilterAppList(string filter)
         {
             uiCommandList.Items.Clear();
             filteredAppList.Clear();
 
             foreach (AppInfo app in appListCache)
             {
-                if (app.isMatch(filter))
+                if (app.IsMatch(filter))
                 {
                     filteredAppList.Add(app);
                     uiCommandList.Items.Add(app.screenName);
@@ -185,7 +185,7 @@ namespace Matsukichi
             }
         }
 
-        private void selectPrevCommand()
+        private void SelectPrevCommand()
         {
             if (uiCommandList.SelectedIndex > 0)
             {
@@ -193,7 +193,7 @@ namespace Matsukichi
             }
         }
 
-        private void selectNextCommand()
+        private void SelectNextCommand()
         {
             if (uiCommandList.SelectedIndex < uiCommandList.Items.Count - 1)
             {
@@ -201,14 +201,14 @@ namespace Matsukichi
             }
         }
 
-        private void openApp()
+        private void OpenApp()
         {
             if (uiCommandList.SelectedIndex >= 0)
             {
-                filteredAppList[uiCommandList.SelectedIndex].focus();
+                filteredAppList[uiCommandList.SelectedIndex].Focus();
             }
             uiFilterText.Text = "";
-            hide();
+            Hide();
         }
     }
 }

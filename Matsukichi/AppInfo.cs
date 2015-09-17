@@ -21,8 +21,8 @@ namespace Matsukichi
         {
             process = proc;
 
-            path = getProcPath(proc);
-            screenName = getAppName(path);
+            path = GetProcPath(proc);
+            screenName = GetAppName(path);
             if (!string.IsNullOrEmpty(screenName))
             {
                 appName = screenName.ToLower();
@@ -32,14 +32,14 @@ namespace Matsukichi
         public AppInfo(string path)
         {
             this.path = path;
-            screenName = getAppName(path);
+            screenName = GetAppName(path);
             if (!string.IsNullOrEmpty(screenName))
             {
                 appName = screenName.ToLower();
             }
         }
 
-        private string getProcPath(Process proc)
+        private string GetProcPath(Process proc)
         {
             // get process information using WMI (Windows Management Instrumentation)
             ManagementObjectSearcher searcher = new ManagementObjectSearcher(string.Format(
@@ -56,7 +56,7 @@ namespace Matsukichi
             return path;
         }
 
-        private string getAppName(string path)
+        private string GetAppName(string path)
         {
             string name = null;
 
@@ -139,7 +139,7 @@ namespace Matsukichi
         //}
         #endregion
 
-        public bool isMatch(string filter)
+        public bool IsMatch(string filter)
         {
             if (
                 appName.IndexOf(filter.ToLower()) >= 0 ||
@@ -154,7 +154,7 @@ namespace Matsukichi
             return false;
         }
 
-        public void focus()
+        public void Focus()
         {
             if (process == null)
             {
@@ -168,7 +168,7 @@ namespace Matsukichi
             }
         }
 
-        static public bool isValid(Process proc)
+        static public bool IsValid(Process proc)
         {
             return (proc.MainWindowTitle.Length != 0);
         }
