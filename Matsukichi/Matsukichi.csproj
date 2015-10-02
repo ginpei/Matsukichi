@@ -47,6 +47,9 @@
   <ItemGroup>
     <Compile Include="AppInfo.cs" />
     <Compile Include="GlobalHotkeyManager.cs" />
+    <Compile Include="Implementations.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
