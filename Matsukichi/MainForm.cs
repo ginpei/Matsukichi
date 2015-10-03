@@ -83,13 +83,7 @@ namespace Matsukichi
 
         private void uiCommandList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int index = uiCommandList.SelectedIndex;
-            CommandItem command = FilteredCommandList[index];
-            Debug.WriteLine(command.Path);
-            //AppInfo info = filteredAppList[uiCommandList.SelectedIndex];
-            //Icon icon = Icon.ExtractAssociatedIcon(info.path);
-            //Bitmap bitmap = Bitmap.FromHicon(icon.Handle);
-            //uiIconPlace.Image = bitmap;
+            ShowCommandIcon();
         }
 
         private void uiFilterText_TextChanged(object sender, EventArgs e)

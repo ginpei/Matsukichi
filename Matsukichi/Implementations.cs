@@ -42,6 +42,17 @@ namespace Matsukichi
             ResetCommandSelection();
         }
 
+        private void ShowCommandIcon()
+        {
+            int index = uiCommandList.SelectedIndex;
+            CommandItem command = FilteredCommandList[index];
+            Debug.WriteLine(command.Path);
+            //AppInfo info = filteredAppList[uiCommandList.SelectedIndex];
+            //Icon icon = Icon.ExtractAssociatedIcon(info.path);
+            //Bitmap bitmap = Bitmap.FromHicon(icon.Handle);
+            //uiIconPlace.Image = bitmap;
+        }
+
         //private void registerHotkeys()
         //{
         //    GlobalHotkeyManager.RegisterHotKey(Keys.Space, KeyModifiers.Control);
