@@ -32,11 +32,11 @@ namespace Matsukichi
                 return;
             }
 
-						string loweredText = text.ToLower();
-						foreach (CommandItem app in RunningAppList.Filter(loweredText))
-						{
-								items.Add(app.screenName);
-						}
+            string loweredText = text.ToLower();
+            foreach (CommandItem app in RunningAppList.Filter(loweredText))
+            {
+                items.Add(app.screenName);
+            }
 
             // TODO rebuild command list by filter text
             Debug.WriteLine(loweredText);
