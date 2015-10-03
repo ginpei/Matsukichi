@@ -45,11 +45,10 @@ namespace Matsukichi
         private void ShowCommandIcon()
         {
             CommandItem command = GetSelectedCommand();
-            Debug.WriteLine(command.Path);
-            //AppInfo info = filteredAppList[uiCommandList.SelectedIndex];
-            //Icon icon = Icon.ExtractAssociatedIcon(info.path);
-            //Bitmap bitmap = Bitmap.FromHicon(icon.Handle);
-            //uiIconPlace.Image = bitmap;
+            Icon icon = Icon.ExtractAssociatedIcon(command.Path);
+            Bitmap bitmap = Bitmap.FromHicon(icon.Handle);
+
+            uiIconPlace.Image = bitmap;
         }
 
         private CommandItem GetSelectedCommand()
