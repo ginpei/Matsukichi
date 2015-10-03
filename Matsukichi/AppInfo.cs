@@ -305,10 +305,10 @@ namespace Matsukichi
         {
             foreach (Process proc in processes)
             {
-                CommandItem app = RunningAppList.createItem(proc);
+                CommandItem app = createItem(proc);
                 if (app != null)
                 {
-                    this.Add(app);
+                    Add(app);
                 }
             }
         }
