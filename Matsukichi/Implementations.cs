@@ -90,8 +90,7 @@ namespace Matsukichi
                 command.Run();
             }
 
-            //Hide();  // TODO Enable hiding after implementating global hot key
-            uiFilterText.Text = "";  // TEMP
+            HideMainWindow();
         }
 
         //private void registerHotkeys()

@@ -41,6 +41,11 @@ namespace Matsukichi
             UpdateRunningAppList();
         }
 
+        private void HideMainWindow()
+        {
+            Visible = false;
+        }
+
         private void ResetCommandSelection()
         {
             if (uiCommandList.Items.Count > 0)
@@ -66,19 +71,19 @@ namespace Matsukichi
                 RunSelectedCommand();
                 e.SuppressKeyPress = true;
             }
-            //else if (e.KeyCode == Keys.Escape)
-            //{
-            //    if (uiFilterText.Text.Length > 0)
-            //    {
-            //        uiFilterText.Text = "";
-            //        uiFilterText.Focus();
-            //    }
-            //    else
-            //    {
-            //        Hide();
-            //    }
-            //    e.SuppressKeyPress = true;
-            //}
+            else if (e.KeyCode == Keys.Escape)
+            {
+                if (uiFilterText.Text.Length > 0)
+                {
+                    uiFilterText.Text = "";
+                    uiFilterText.Focus();
+                }
+                else
+                {
+                    HideMainWindow();
+                }
+                e.SuppressKeyPress = true;
+            }
         }
 
         private void uiCommandList_SelectedIndexChanged(object sender, EventArgs e)
@@ -118,13 +123,11 @@ namespace Matsukichi
 
         public void GlobalHotkeyManager_HotKeyPressed(object sender, HotKeyEventArgs e)
         {
-            // TODO implement showing by hot key
-            Debug.WriteLine("<C-Space>");
-
-            //if (e.Modifiers == KeyModifiers.Control && e.Key == Keys.Space)
-            //{
-            //    Show();
-            //}
+            // C-Space
+            if (e.Modifiers == KeyModifiers.Control && e.Key == Keys.Space)
+            {
+                ShowMainWindow();
+            }
         }
     }
 }
