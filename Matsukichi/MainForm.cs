@@ -14,6 +14,40 @@ namespace Matsukichi
         //private AppList appListCache = new AppList();
         //private AppList filteredAppList = new AppList();
 
+        RunningAppList RunningAppList = new RunningAppList();
+
+        private void Initialize()
+        {
+            RegisterGlobalHotKey();
+            ShowMainWindow();
+        }
+
+        private void RegisterGlobalHotKey()
+        {
+            GlobalHotkeyManager.RegisterHotKey(Keys.Space, KeyModifiers.Control);
+            GlobalHotkeyManager.HotKeyPressed += new EventHandler<HotKeyEventArgs>(GlobalHotkeyManager_HotKeyPressed);
+            CheckForIllegalCrossThreadCalls = false;  // FIXME
+        }
+
+        private void ShowMainWindow()
+        {
+            uiIconPlace.Image = null;
+            uiCommandList.Items.Clear();
+
+            Visible = true;
+            SetForegroundWindow(Handle);
+
+            UpdateRunningAppList();
+        }
+
+        private void ResetCommandSelection()
+        {
+            if (uiCommandList.Items.Count > 0)
+            {
+                uiCommandList.SelectedIndex = 0;
+            }
+        }
+
         public MainForm()
         {
             InitializeComponent();
@@ -21,8 +55,7 @@ namespace Matsukichi
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            //registerHotkeys();
-            //UpdateAppList();
+            Initialize();
         }
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
@@ -57,12 +90,7 @@ namespace Matsukichi
 
         private void uiFilterText_TextChanged(object sender, EventArgs e)
         {
-            //FilterAppList(uiFilterText.Text);
-
-            //if (uiCommandList.Items.Count > 0)
-            //{
-            //    uiCommandList.SelectedIndex = 0;
-            //}
+            FilterAvailableCommandList(uiFilterText.Text);
         }
 
         private void uiFilterText_KeyDown(object sender, KeyEventArgs e)
@@ -86,6 +114,9 @@ namespace Matsukichi
 
         public void GlobalHotkeyManager_HotKeyPressed(object sender, HotKeyEventArgs e)
         {
+            // TODO implement showing by hot key
+            Debug.WriteLine("<C-Space>");
+
             //if (e.Modifiers == KeyModifiers.Control && e.Key == Keys.Space)
             //{
             //    Show();

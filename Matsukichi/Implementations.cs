@@ -11,9 +11,38 @@ namespace Matsukichi
 {
     public partial class MainForm
     {
-        //[DllImport("user32.dll")]
-        //[return: MarshalAs(UnmanagedType.Bool)]
-        //private static extern bool SetForegroundWindow(IntPtr hWnd);
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        private void UpdateRunningAppList()
+        {
+            RunningAppList.Update(Process.GetProcesses());
+            FilterAvailableCommandList();
+        }
+
+        private void FilterAvailableCommandList(string text=null)
+        {
+            ListBox.ObjectCollection items = uiCommandList.Items;
+
+            items.Clear();
+
+            if (string.IsNullOrEmpty(text))
+            {
+                return;
+            }
+
+						string loweredText = text.ToLower();
+						foreach (AppInfo app in RunningAppList.Filter(loweredText))
+						{
+								items.Add(app.screenName);
+						}
+
+            // TODO rebuild command list by filter text
+            Debug.WriteLine(loweredText);
+
+            ResetCommandSelection();
+        }
 
         //private void registerHotkeys()
         //{

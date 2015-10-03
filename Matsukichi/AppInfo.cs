@@ -6,8 +6,22 @@ using System.Runtime.InteropServices;  // DllImport
 
 namespace Matsukichi
 {
-    public partial class AppInfo
+    public class AppInfo
     {
+        public string Path;
+        public string appName;
+        public string screenName;
+
+        internal bool IsMatch(string loweredText)
+        {
+            if (Path.IndexOf(loweredText) >= 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         //[DllImport("user32.dll")]
         //[return: MarshalAs(UnmanagedType.Bool)]
         //private static extern bool SetForegroundWindow(IntPtr hWnd);
@@ -176,5 +190,106 @@ namespace Matsukichi
 
     public partial class AppList : System.Collections.Generic.List<AppInfo>
     {
+    }
+
+    class RunningAppInfo : AppInfo
+    {
+        public Process process;
+
+        public RunningAppInfo(Process proc) : base()
+        {
+            process = proc;
+
+            Path = GetProcPath(proc);
+            screenName = GetAppName(Path);
+            if (!string.IsNullOrEmpty(screenName))
+            {
+                appName = screenName.ToLower();
+            }
+        }
+
+        private string GetProcPath(Process proc)
+        {
+            // get process information using WMI (Windows Management Instrumentation)
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher(string.Format(
+                "SELECT ProcessId, ExecutablePath " +
+                "FROM Win32_Process " +
+                "WHERE ProcessId LIKE '{0}'",
+                proc.Id.ToString()
+            ));
+            ManagementObjectCollection searchResult = searcher.Get();
+            ManagementObject procData = searchResult.Cast<ManagementObject>().FirstOrDefault();
+
+            string path = (string)procData["ExecutablePath"];
+
+            return path;
+        }
+
+        private string GetAppName(string path)
+        {
+            string name = null;
+
+            if (path.EndsWith(".lnk"))
+            {
+                name = System.IO.Path.GetFileName(path);
+                name = name.Substring(0, name.Length - 4);
+                return name;
+            }
+
+            try
+            {
+                // 'System.IO.FileNotFoundException' when path is "C:\\WINDOWS\\system32\\ApplicationFrameHost.exe"
+                FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(path);
+                name = myFileVersionInfo.FileDescription;
+
+                return name;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+    }
+
+    class RunningAppList : AppList
+    {
+        public void Update(Process[] processes)
+        {
+            foreach (Process proc in processes)
+            {
+                AppInfo app = RunningAppList.createItem(proc);
+                if (app != null)
+                {
+                    this.Add(app);
+                }
+            }
+        }
+
+        private static AppInfo createItem(Process proc)
+        {
+            AppInfo app = null;
+
+            if (proc.MainWindowTitle.Length > 1)
+            {
+                app = new RunningAppInfo(proc);
+            }
+
+            return app;
+        }
+
+        public AppList Filter(string loweredText)
+        {
+            AppList list = new AppList();
+
+            foreach (AppInfo app in this)
+            {
+                if (app.IsMatch(loweredText))
+                {
+                    list.Add(app);
+                }
+            }
+
+            return list;
+        }
     }
 }
