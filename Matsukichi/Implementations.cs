@@ -44,13 +44,19 @@ namespace Matsukichi
 
         private void ShowCommandIcon()
         {
-            int index = uiCommandList.SelectedIndex;
-            CommandItem command = FilteredCommandList[index];
+            CommandItem command = GetSelectedCommand();
             Debug.WriteLine(command.Path);
             //AppInfo info = filteredAppList[uiCommandList.SelectedIndex];
             //Icon icon = Icon.ExtractAssociatedIcon(info.path);
             //Bitmap bitmap = Bitmap.FromHicon(icon.Handle);
             //uiIconPlace.Image = bitmap;
+        }
+
+        private CommandItem GetSelectedCommand()
+        {
+            int index = uiCommandList.SelectedIndex;
+            CommandItem command = FilteredCommandList[index];
+            return command;
         }
 
         //private void registerHotkeys()
