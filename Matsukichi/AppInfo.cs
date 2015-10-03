@@ -173,4 +173,8 @@ namespace Matsukichi
             return (proc.MainWindowTitle.Length != 0);
         }
     }
+
+    public partial class AppList : System.Collections.Generic.List<AppInfo>
+    {
+    }
 }

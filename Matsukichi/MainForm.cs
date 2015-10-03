@@ -11,8 +11,8 @@ namespace Matsukichi
 {
     public partial class MainForm : Form
     {
-        private List<AppInfo> appListCache = new List<AppInfo>();
-        private List<AppInfo> filteredAppList = new List<AppInfo>();
+        private AppList appListCache = new AppList();
+        private AppList filteredAppList = new AppList();
 
         public MainForm()
         {
