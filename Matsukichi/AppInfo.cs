@@ -303,6 +303,8 @@ namespace Matsukichi
     {
         public void Update(Process[] processes)
         {
+            Clear();
+
             foreach (Process proc in processes)
             {
                 CommandItem app = createItem(proc);
