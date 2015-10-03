@@ -25,9 +25,9 @@ namespace Matsukichi
         {
             FilteredCommandList.Clear();
 
-            if (string.IsNullOrEmpty(text))
+            if (text == null)
             {
-                return;
+                text = uiFilterText.Text;
             }
 
             string loweredText = text.ToLower();
@@ -35,9 +35,6 @@ namespace Matsukichi
             {
                 FilteredCommandList.Add(app);
             }
-
-            // TODO rebuild command list by filter text
-            Debug.WriteLine(loweredText);
 
             ResetCommandSelection();
         }

@@ -93,7 +93,7 @@ namespace Matsukichi
 
         private void uiFilterText_TextChanged(object sender, EventArgs e)
         {
-            FilterAvailableCommandList(uiFilterText.Text);
+            FilterAvailableCommandList();
         }
 
         private void uiFilterText_KeyDown(object sender, KeyEventArgs e)
