@@ -12,37 +12,12 @@ namespace Matsukichi
 
     public partial class MainForm : Form
     {
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool SetForegroundWindow(IntPtr hWnd);
-
         private List<AppInfo> appListCache = new List<AppInfo>();
         private List<AppInfo> filteredAppList = new List<AppInfo>();
 
         public MainForm()
         {
             InitializeComponent();
-        }
-
-        private void registerHotkeys()
-        {
-            GlobalHotkeyManager.RegisterHotKey(Keys.Space, KeyModifiers.Control);
-            GlobalHotkeyManager.HotKeyPressed += new EventHandler<HotKeyEventArgs>(GlobalHotkeyManager_HotKeyPressed);
-            CheckForIllegalCrossThreadCalls = false;  // FIXME
-        }
-
-        private void Show()
-        {
-            Visible = true;
-            SetForegroundWindow(Handle);
-            uiIconPlace.Image = null;
-            uiCommandList.Items.Clear();
-            UpdateAppList();
-        }
-
-        private void Hide()
-        {
-            Visible = false;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -116,6 +91,34 @@ namespace Matsukichi
             {
                 Show();
             }
+        }
+
+
+
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        private void registerHotkeys()
+        {
+            GlobalHotkeyManager.RegisterHotKey(Keys.Space, KeyModifiers.Control);
+            GlobalHotkeyManager.HotKeyPressed += new EventHandler<HotKeyEventArgs>(GlobalHotkeyManager_HotKeyPressed);
+            CheckForIllegalCrossThreadCalls = false;  // FIXME
+        }
+
+        private void Show()
+        {
+            Visible = true;
+            SetForegroundWindow(Handle);
+            uiIconPlace.Image = null;
+            uiCommandList.Items.Clear();
+            UpdateAppList();
+        }
+
+        private void Hide()
+        {
+            Visible = false;
         }
 
         private void UpdateAppList()
