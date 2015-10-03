@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;  // DllImport
 
 namespace Matsukichi
 {
-    public class AppInfo
+    public class CommandItem
     {
         public string Path;
         public string appName;
@@ -188,15 +188,15 @@ namespace Matsukichi
         //}
     }
 
-    public partial class AppList : System.Collections.Generic.List<AppInfo>
+    public partial class CommandList : System.Collections.Generic.List<CommandItem>
     {
     }
 
-    class RunningAppInfo : AppInfo
+    class RunningAppItem : CommandItem
     {
         public Process process;
 
-        public RunningAppInfo(Process proc) : base()
+        public RunningAppItem(Process proc) : base()
         {
             process = proc;
 
@@ -251,13 +251,13 @@ namespace Matsukichi
         }
     }
 
-    class RunningAppList : AppList
+    class RunningAppList : CommandList
     {
         public void Update(Process[] processes)
         {
             foreach (Process proc in processes)
             {
-                AppInfo app = RunningAppList.createItem(proc);
+                CommandItem app = RunningAppList.createItem(proc);
                 if (app != null)
                 {
                     this.Add(app);
@@ -265,23 +265,23 @@ namespace Matsukichi
             }
         }
 
-        private static AppInfo createItem(Process proc)
+        private static CommandItem createItem(Process proc)
         {
-            AppInfo app = null;
+            CommandItem app = null;
 
             if (proc.MainWindowTitle.Length > 1)
             {
-                app = new RunningAppInfo(proc);
+                app = new RunningAppItem(proc);
             }
 
             return app;
         }
 
-        public AppList Filter(string loweredText)
+        public CommandList Filter(string loweredText)
         {
-            AppList list = new AppList();
+            CommandList list = new CommandList();
 
-            foreach (AppInfo app in this)
+            foreach (CommandItem app in this)
             {
                 if (app.IsMatch(loweredText))
                 {

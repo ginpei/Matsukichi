@@ -33,7 +33,7 @@ namespace Matsukichi
             }
 
 						string loweredText = text.ToLower();
-						foreach (AppInfo app in RunningAppList.Filter(loweredText))
+						foreach (CommandItem app in RunningAppList.Filter(loweredText))
 						{
 								items.Add(app.screenName);
 						}

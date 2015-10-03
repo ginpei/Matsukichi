@@ -12,7 +12,7 @@ namespace Matsukichi
     public partial class MainForm : Form
     {
         //private AppList appListCache = new AppList();
-        //private AppList filteredAppList = new AppList();
+        //private CommandList filteredCommandList = new CommandList();
 
         RunningAppList RunningAppList = new RunningAppList();
 
