@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Diagnostics;  // Process
 using System.Management;  // ManagementObjectSearcher (System.Management.dll)
