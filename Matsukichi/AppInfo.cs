@@ -8,170 +8,170 @@ namespace Matsukichi
 {
     public partial class AppInfo
     {
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool SetForegroundWindow(IntPtr hWnd);
+        //[DllImport("user32.dll")]
+        //[return: MarshalAs(UnmanagedType.Bool)]
+        //private static extern bool SetForegroundWindow(IntPtr hWnd);
 
-        public Process process;
-        public string path;
-        public string appName;
-        public string screenName;
+        //public Process process;
+        //public string path;
+        //public string appName;
+        //public string screenName;
 
-        public AppInfo(Process proc)
-        {
-            process = proc;
-
-            path = GetProcPath(proc);
-            screenName = GetAppName(path);
-            if (!string.IsNullOrEmpty(screenName))
-            {
-                appName = screenName.ToLower();
-            }
-        }
-
-        public AppInfo(string path)
-        {
-            this.path = path;
-            screenName = GetAppName(path);
-            if (!string.IsNullOrEmpty(screenName))
-            {
-                appName = screenName.ToLower();
-            }
-        }
-
-        private string GetProcPath(Process proc)
-        {
-            // get process information using WMI (Windows Management Instrumentation)
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher(string.Format(
-                "SELECT ProcessId, ExecutablePath " +
-                "FROM Win32_Process " +
-                "WHERE ProcessId LIKE '{0}'",
-                proc.Id.ToString()
-            ));
-            ManagementObjectCollection searchResult = searcher.Get();
-            ManagementObject procData = searchResult.Cast<ManagementObject>().FirstOrDefault();
-
-            string path = (string)procData["ExecutablePath"];
-
-            return path;
-        }
-
-        private string GetAppName(string path)
-        {
-            string name = null;
-
-            if (path.EndsWith(".lnk"))
-            {
-                name = System.IO.Path.GetFileName(path);
-                name = name.Substring(0, name.Length - 4);
-                return name;
-            }
-
-            try
-            {
-                // 'System.IO.FileNotFoundException' when path is "C:\\WINDOWS\\system32\\ApplicationFrameHost.exe"
-                FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(path);
-                name = myFileVersionInfo.FileDescription;
-
-                return name;
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        /**
-         * @see http://stackoverflow.com/questions/22201752/how-to-get-active-window-app-name-as-shown-in-task-manager
-         */
-        #region not used
-        //private string getAppName(Process p)
+        //public AppInfo(Process proc)
         //{
-        //    string name = "";
-        //    var processname = p.ProcessName;
-        //    string fileName = "";
-        //    int pid = p.Id;
+        //    process = proc;
 
-        //    if (String.IsNullOrEmpty(processname))
+        //    path = GetProcPath(proc);
+        //    screenName = GetAppName(path);
+        //    if (!string.IsNullOrEmpty(screenName))
         //    {
-        //        return "";
+        //        appName = screenName.ToLower();
+        //    }
+        //}
+
+        //public AppInfo(string path)
+        //{
+        //    this.path = path;
+        //    screenName = GetAppName(path);
+        //    if (!string.IsNullOrEmpty(screenName))
+        //    {
+        //        appName = screenName.ToLower();
+        //    }
+        //}
+
+        //private string GetProcPath(Process proc)
+        //{
+        //    // get process information using WMI (Windows Management Instrumentation)
+        //    ManagementObjectSearcher searcher = new ManagementObjectSearcher(string.Format(
+        //        "SELECT ProcessId, ExecutablePath " +
+        //        "FROM Win32_Process " +
+        //        "WHERE ProcessId LIKE '{0}'",
+        //        proc.Id.ToString()
+        //    ));
+        //    ManagementObjectCollection searchResult = searcher.Get();
+        //    ManagementObject procData = searchResult.Cast<ManagementObject>().FirstOrDefault();
+
+        //    string path = (string)procData["ExecutablePath"];
+
+        //    return path;
+        //}
+
+        //private string GetAppName(string path)
+        //{
+        //    string name = null;
+
+        //    if (path.EndsWith(".lnk"))
+        //    {
+        //        name = System.IO.Path.GetFileName(path);
+        //        name = name.Substring(0, name.Length - 4);
+        //        return name;
         //    }
 
-        //    switch (processname)
-        //    {
-        //        case "explorer": //metro processes
-        //        case "WWAHost":
-        //            return "";
-        //        default:
-        //            break;
-        //    }
-        //    string wmiQuery = string.Format("SELECT ProcessId, ExecutablePath FROM Win32_Process WHERE ProcessId LIKE '{0}'", pid.ToString());
-        //    var pro = new ManagementObjectSearcher(wmiQuery).Get().Cast<ManagementObject>().FirstOrDefault();
-        //    fileName = (string)pro["ExecutablePath"];
-
-        //    if (String.IsNullOrEmpty(fileName))
-        //    {
-        //        return "";
-        //    }
-
-        //    FileVersionInfo myFileVersionInfo;
         //    try
         //    {
-        //        // Get the file version
-        //        myFileVersionInfo = FileVersionInfo.GetVersionInfo(fileName);
+        //        // 'System.IO.FileNotFoundException' when path is "C:\\WINDOWS\\system32\\ApplicationFrameHost.exe"
+        //        FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(path);
+        //        name = myFileVersionInfo.FileDescription;
+
+        //        return name;
         //    }
         //    catch
         //    {
-        //        return "";
+        //        return null;
         //    }
-
-        //    // Get the file description
-        //    name = myFileVersionInfo.FileDescription;
-        //    //if (name == "")
-        //    //    name = GetTitle(handle);
-
-        //    if (String.IsNullOrEmpty(name))
-        //    {
-        //        return "";
-        //    }
-
-        //    return name;
         //}
-        #endregion
 
-        public bool IsMatch(string filter)
-        {
-            if (
-                appName.IndexOf(filter.ToLower()) >= 0 ||
-                (process != null &&
-                    (process.ProcessName.IndexOf(filter.ToLower()) >= 0 ||
-                    process.MainWindowTitle.ToLower().IndexOf(filter.ToLower()) >= 0)
-                )
-            ) {
-                return true;
-            }
+        ///**
+        // * @see http://stackoverflow.com/questions/22201752/how-to-get-active-window-app-name-as-shown-in-task-manager
+        // */
+        //#region not used
+        ////private string getAppName(Process p)
+        ////{
+        ////    string name = "";
+        ////    var processname = p.ProcessName;
+        ////    string fileName = "";
+        ////    int pid = p.Id;
 
-            return false;
-        }
+        ////    if (String.IsNullOrEmpty(processname))
+        ////    {
+        ////        return "";
+        ////    }
 
-        public void Focus()
-        {
-            if (process == null)
-            {
-                Process proc = new Process();
-                proc.StartInfo.FileName = path;
-                proc.Start();
-            }
-            else
-            {
-                SetForegroundWindow(process.MainWindowHandle);
-            }
-        }
+        ////    switch (processname)
+        ////    {
+        ////        case "explorer": //metro processes
+        ////        case "WWAHost":
+        ////            return "";
+        ////        default:
+        ////            break;
+        ////    }
+        ////    string wmiQuery = string.Format("SELECT ProcessId, ExecutablePath FROM Win32_Process WHERE ProcessId LIKE '{0}'", pid.ToString());
+        ////    var pro = new ManagementObjectSearcher(wmiQuery).Get().Cast<ManagementObject>().FirstOrDefault();
+        ////    fileName = (string)pro["ExecutablePath"];
 
-        static public bool IsValid(Process proc)
-        {
-            return (proc.MainWindowTitle.Length != 0);
-        }
+        ////    if (String.IsNullOrEmpty(fileName))
+        ////    {
+        ////        return "";
+        ////    }
+
+        ////    FileVersionInfo myFileVersionInfo;
+        ////    try
+        ////    {
+        ////        // Get the file version
+        ////        myFileVersionInfo = FileVersionInfo.GetVersionInfo(fileName);
+        ////    }
+        ////    catch
+        ////    {
+        ////        return "";
+        ////    }
+
+        ////    // Get the file description
+        ////    name = myFileVersionInfo.FileDescription;
+        ////    //if (name == "")
+        ////    //    name = GetTitle(handle);
+
+        ////    if (String.IsNullOrEmpty(name))
+        ////    {
+        ////        return "";
+        ////    }
+
+        ////    return name;
+        ////}
+        //#endregion
+
+        //public bool IsMatch(string filter)
+        //{
+        //    if (
+        //        appName.IndexOf(filter.ToLower()) >= 0 ||
+        //        (process != null &&
+        //            (process.ProcessName.IndexOf(filter.ToLower()) >= 0 ||
+        //            process.MainWindowTitle.ToLower().IndexOf(filter.ToLower()) >= 0)
+        //        )
+        //    ) {
+        //        return true;
+        //    }
+
+        //    return false;
+        //}
+
+        //public void Focus()
+        //{
+        //    if (process == null)
+        //    {
+        //        Process proc = new Process();
+        //        proc.StartInfo.FileName = path;
+        //        proc.Start();
+        //    }
+        //    else
+        //    {
+        //        SetForegroundWindow(process.MainWindowHandle);
+        //    }
+        //}
+
+        //static public bool IsValid(Process proc)
+        //{
+        //    return (proc.MainWindowTitle.Length != 0);
+        //}
     }
 
     public partial class AppList : System.Collections.Generic.List<AppInfo>
