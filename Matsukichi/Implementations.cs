@@ -53,9 +53,46 @@ namespace Matsukichi
 
         private CommandItem GetSelectedCommand()
         {
+            CommandItem command = null;
             int index = uiCommandList.SelectedIndex;
-            CommandItem command = FilteredCommandList[index];
+
+            if (index >= 0)
+            {
+                command = FilteredCommandList[index];
+
+            }
+
             return command;
+        }
+
+        private void SelectPrevCommand()
+        {
+            if (uiCommandList.SelectedIndex > 0)
+            {
+                uiCommandList.SelectedIndex--;
+            }
+        }
+
+        private void SelectNextCommand()
+        {
+            if (uiCommandList.SelectedIndex < uiCommandList.Items.Count - 1)
+            {
+                uiCommandList.SelectedIndex++;
+            }
+        }
+
+        private void RunSelectedCommand()
+        {
+            CommandItem command = GetSelectedCommand();
+
+            if (command != null)
+            {
+                Debug.WriteLine(command.Path);
+                //FilteredCommandList[uiCommandList.SelectedIndex].Focus();
+            }
+
+            //Hide();  // TODO Enable hiding after implementating global hot key
+            uiFilterText.Text = "";  // TEMP
         }
 
         //private void registerHotkeys()
@@ -144,32 +181,6 @@ namespace Matsukichi
         //    {
         //        uiCommandList.SelectedIndex = 0;
         //    }
-        //}
-
-        //private void SelectPrevCommand()
-        //{
-        //    if (uiCommandList.SelectedIndex > 0)
-        //    {
-        //        uiCommandList.SelectedIndex--;
-        //    }
-        //}
-
-        //private void SelectNextCommand()
-        //{
-        //    if (uiCommandList.SelectedIndex < uiCommandList.Items.Count - 1)
-        //    {
-        //        uiCommandList.SelectedIndex++;
-        //    }
-        //}
-
-        //private void OpenApp()
-        //{
-        //    if (uiCommandList.SelectedIndex >= 0)
-        //    {
-        //        filteredAppList[uiCommandList.SelectedIndex].Focus();
-        //    }
-        //    uiFilterText.Text = "";
-        //    Hide();
         //}
     }
 }

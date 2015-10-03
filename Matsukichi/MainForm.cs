@@ -61,11 +61,11 @@ namespace Matsukichi
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
-            //if (e.KeyCode == Keys.Enter)
-            //{
-            //    OpenApp();
-            //    e.SuppressKeyPress = true;
-            //}
+            if (e.KeyCode == Keys.Enter)
+            {
+                RunSelectedCommand();
+                e.SuppressKeyPress = true;
+            }
             //else if (e.KeyCode == Keys.Escape)
             //{
             //    if (uiFilterText.Text.Length > 0)
@@ -93,21 +93,27 @@ namespace Matsukichi
 
         private void uiFilterText_KeyDown(object sender, KeyEventArgs e)
         {
-            //if (e.KeyCode == Keys.Up || (e.Control && e.KeyCode == Keys.K))
-            //{
-            //    SelectPrevCommand();
-            //    e.SuppressKeyPress = true;
-            //}
-            //else if (e.KeyCode == Keys.Down || (e.Control && e.KeyCode == Keys.J))
-            //{
-            //    SelectNextCommand();
-            //    e.SuppressKeyPress = true;
-            //}
-            //else if (e.Control && e.KeyCode == Keys.M)
-            //{
-            //    OpenApp();
-            //    e.SuppressKeyPress = true;
-            //}
+            // Up
+            // C-K
+            if (e.KeyCode == Keys.Up || (e.Control && e.KeyCode == Keys.K))
+            {
+                SelectPrevCommand();
+                e.SuppressKeyPress = true;
+            }
+            // Down
+            // C-J
+            else if (e.KeyCode == Keys.Down || (e.Control && e.KeyCode == Keys.J))
+            {
+                SelectNextCommand();
+                e.SuppressKeyPress = true;
+            }
+            // C-M
+            // (Enter is specified at MainForm_KeyDown())
+            else if (e.Control && e.KeyCode == Keys.M)
+            {
+                RunSelectedCommand();
+                e.SuppressKeyPress = true;
+            }
         }
 
         public void GlobalHotkeyManager_HotKeyPressed(object sender, HotKeyEventArgs e)
