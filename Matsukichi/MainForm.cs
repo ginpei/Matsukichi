@@ -11,6 +11,8 @@ namespace Matsukichi
 {
     public partial class MainForm : Form
     {
+        public const int MAX_SUGGESTION = 5;
+
         //private AppList appListCache = new AppList();
 
         private FilteredCommandList FilteredCommandList = new FilteredCommandList();
