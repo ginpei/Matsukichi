@@ -83,12 +83,11 @@ namespace Matsukichi
 
         private void RunSelectedCommand()
         {
-            CommandItem command = GetSelectedCommand();
+            RunningAppItem command = (RunningAppItem)GetSelectedCommand();
 
             if (command != null)
             {
-                Debug.WriteLine(command.Path);
-                //FilteredCommandList[uiCommandList.SelectedIndex].Focus();
+                command.Run();
             }
 
             //Hide();  // TODO Enable hiding after implementating global hot key

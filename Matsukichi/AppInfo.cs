@@ -29,9 +29,10 @@ namespace Matsukichi
             return true;
         }
 
-        //[DllImport("user32.dll")]
-        //[return: MarshalAs(UnmanagedType.Bool)]
-        //private static extern bool SetForegroundWindow(IntPtr hWnd);
+        internal void Run()
+        {
+            throw new NotImplementedException();
+        }
 
         //public Process process;
         //public string path;
@@ -223,11 +224,15 @@ namespace Matsukichi
 
     class RunningAppItem : CommandItem
     {
-        public Process process;
+        public Process Process;
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
 
         public RunningAppItem(Process proc) : base()
         {
-            process = proc;
+            Process = proc;
 
             Path = GetProcPath(proc);
             ScreenName = GetAppName(Path);
@@ -277,6 +282,20 @@ namespace Matsukichi
             {
                 return null;
             }
+        }
+
+        public new void Run()
+        {
+            //if (Process == null)
+            //{
+            //    Process proc = new Process();
+            //    proc.StartInfo.FileName = Path;
+            //    proc.Start();
+            //}
+            //else
+            //{
+            //}
+            SetForegroundWindow(Process.MainWindowHandle);
         }
     }
 
