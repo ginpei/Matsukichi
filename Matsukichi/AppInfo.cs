@@ -11,12 +11,12 @@ namespace Matsukichi
     public class CommandItem
     {
         public string Path;
-        public string appName;
-        public string screenName;
+        public string AppName;
+        public string ScreenName;
 
         internal bool IsMatch(string loweredText)
         {
-            if (string.IsNullOrEmpty(screenName))
+            if (string.IsNullOrEmpty(ScreenName))
             {
                 return false;
             }
@@ -216,7 +216,7 @@ namespace Matsukichi
 
         public new void Add(CommandItem item)
         {
-            Items.Add(item.screenName);
+            Items.Add(item.ScreenName);
             base.Add(item);
         }
     }
@@ -230,10 +230,10 @@ namespace Matsukichi
             process = proc;
 
             Path = GetProcPath(proc);
-            screenName = GetAppName(Path);
-            if (!string.IsNullOrEmpty(screenName))
+            ScreenName = GetAppName(Path);
+            if (!string.IsNullOrEmpty(ScreenName))
             {
-                appName = screenName.ToLower();
+                AppName = ScreenName.ToLower();
             }
         }
 
