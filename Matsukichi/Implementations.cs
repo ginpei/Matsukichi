@@ -30,15 +30,23 @@ namespace Matsukichi
                 text = uiFilterText.Text;
             }
 
-            int loopCount = 0;
-            string loweredText = text.ToLower();
-            foreach (CommandItem app in RunningAppList.Filter(loweredText))
+            if (text.Length > 0)
             {
-                FilteredCommandList.Add(app);
-                if (++loopCount >= MAX_SUGGESTION)
+
+                int loopCount = 0;
+                string loweredText = text.ToLower();
+                foreach (CommandItem app in RunningAppList.Filter(loweredText))
                 {
-                    break;
+                    FilteredCommandList.Add(app);
+                    if (++loopCount >= MAX_SUGGESTION)
+                    {
+                        break;
+                    }
                 }
+            }
+            else
+            {
+                uiIconPlace.Image = null;
             }
 
             ResetCommandSelection();
