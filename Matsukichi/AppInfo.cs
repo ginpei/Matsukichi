@@ -3,6 +3,8 @@ using System.Linq;
 using System.Diagnostics;  // Process
 using System.Management;  // ManagementObjectSearcher (System.Management.dll)
 using System.Runtime.InteropServices;  // DllImport
+using System.Windows.Forms;
+
 
 namespace Matsukichi
 {
@@ -14,12 +16,17 @@ namespace Matsukichi
 
         internal bool IsMatch(string loweredText)
         {
-            if (Path.IndexOf(loweredText) >= 0)
+            if (string.IsNullOrEmpty(screenName))
             {
-                return true;
+                return false;
             }
 
-            return false;
+            if (Path.IndexOf(loweredText) < 1)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         //[DllImport("user32.dll")]
@@ -190,6 +197,28 @@ namespace Matsukichi
 
     public partial class CommandList : System.Collections.Generic.List<CommandItem>
     {
+    }
+
+    internal class FilteredCommandList : CommandList
+    {
+        ListBox.ObjectCollection Items;
+
+        public ListBox.ObjectCollection SetUIItems(ListBox.ObjectCollection items)
+        {
+            return Items = items;
+        }
+
+        public new void Clear()
+        {
+            Items.Clear();
+            base.Clear();
+        }
+
+        public new void Add(CommandItem item)
+        {
+            Items.Add(item.screenName);
+            base.Add(item);
+        }
     }
 
     class RunningAppItem : CommandItem

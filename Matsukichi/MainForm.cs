@@ -12,13 +12,14 @@ namespace Matsukichi
     public partial class MainForm : Form
     {
         //private AppList appListCache = new AppList();
-        //private CommandList filteredCommandList = new CommandList();
 
+        private FilteredCommandList FilteredCommandList = new FilteredCommandList();
         RunningAppList RunningAppList = new RunningAppList();
 
         private void Initialize()
         {
             RegisterGlobalHotKey();
+            FilteredCommandList.SetUIItems(uiCommandList.Items);
             ShowMainWindow();
         }
 
@@ -82,6 +83,9 @@ namespace Matsukichi
 
         private void uiCommandList_SelectedIndexChanged(object sender, EventArgs e)
         {
+            int index = uiCommandList.SelectedIndex;
+            CommandItem command = FilteredCommandList[index];
+            Debug.WriteLine(command.Path);
             //AppInfo info = filteredAppList[uiCommandList.SelectedIndex];
             //Icon icon = Icon.ExtractAssociatedIcon(info.path);
             //Bitmap bitmap = Bitmap.FromHicon(icon.Handle);

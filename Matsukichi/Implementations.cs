@@ -23,9 +23,7 @@ namespace Matsukichi
 
         private void FilterAvailableCommandList(string text=null)
         {
-            ListBox.ObjectCollection items = uiCommandList.Items;
-
-            items.Clear();
+            FilteredCommandList.Clear();
 
             if (string.IsNullOrEmpty(text))
             {
@@ -35,7 +33,7 @@ namespace Matsukichi
             string loweredText = text.ToLower();
             foreach (CommandItem app in RunningAppList.Filter(loweredText))
             {
-                items.Add(app.screenName);
+                FilteredCommandList.Add(app);
             }
 
             // TODO rebuild command list by filter text
