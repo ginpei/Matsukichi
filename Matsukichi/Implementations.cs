@@ -40,6 +40,11 @@ namespace Matsukichi
                 string loweredText = text.ToLower();
                 loopCount = AddNecessaryCommand(loopCount, loweredText, RunningAppList);
                 loopCount = AddNecessaryCommand(loopCount, loweredText, StartMenuAppList);
+
+                if (FilteredCommandList.Count < 1)
+                {
+                    ClearIcon();
+                }
             }
             else
             {
