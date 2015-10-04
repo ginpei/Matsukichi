@@ -376,6 +376,11 @@ namespace Matsukichi
             // add apps to the list if a link heads to an exe file
             foreach (string path in paths)
             {
+                if (path.ToLower().Contains("uninstall"))
+                {
+                    continue;
+                }
+
                 AppLinkItem app = CreateItem(path);
                 if (app != null)
                 {
