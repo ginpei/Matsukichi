@@ -1,10 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
-using System.Diagnostics;  // Process
-using System.Runtime.InteropServices;  // DllImport
-using System.Drawing;
-using System.IO;
 using Matsukichi.GlobalHotkey;
 
 namespace Matsukichi
@@ -12,8 +7,6 @@ namespace Matsukichi
     public partial class MainForm : Form
     {
         public const int MAX_SUGGESTION = 5;
-
-        //private AppList appListCache = new AppList();
 
         private FilteredCommandList FilteredCommandList = new FilteredCommandList();
         RunningAppList RunningAppList = new RunningAppList();
