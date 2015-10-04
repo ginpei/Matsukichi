@@ -112,7 +112,9 @@ namespace Matsukichi
                 }
                 catch (System.ComponentModel.Win32Exception)
                 {
-                    MessageBox.Show(string.Format("Failed to start app: {0}", command.ScreenName), "Matsukichi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    string title = "Matsukichi (´・ω・`)";
+                    string message = string.Format("Failed to start app: {0}", command.ScreenName);
+                    MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
 
