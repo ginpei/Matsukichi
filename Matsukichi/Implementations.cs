@@ -109,7 +109,14 @@ namespace Matsukichi
             CommandItem command = GetSelectedCommand();
             if (command != null)
             {
-                command.Run();
+                try
+                {
+                    command.Run();
+                }
+                catch (System.ComponentModel.Win32Exception)
+                {
+                    MessageBox.Show(string.Format("Failed to start app: {0}", command.ScreenName), "Matsukichi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
 
             HideMainWindow();
