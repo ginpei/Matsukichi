@@ -1,6 +1,6 @@
+using Matsukichi.GlobalHotkey;
 using System;
 using System.Windows.Forms;
-using Matsukichi.GlobalHotkey;
 
 namespace Matsukichi
 {
