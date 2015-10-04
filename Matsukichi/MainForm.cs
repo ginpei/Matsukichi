@@ -30,6 +30,7 @@ namespace Matsukichi
         private void ShowMainWindow()
         {
             uiIconPlace.Image = null;
+            uiFilterText.Clear();
             uiCommandList.Items.Clear();
 
             Visible = true;
