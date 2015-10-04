@@ -11,17 +11,12 @@ namespace Matsukichi
     public class CommandItem
     {
         public string Path;
-        public string AppName;
         public string ScreenName;
 
         protected void SetByPath(string path)
         {
             Path = path;
             ScreenName = GetAppName(Path);
-            if (!string.IsNullOrEmpty(ScreenName))
-            {
-                AppName = ScreenName.ToLower();
-            }
         }
 
         private string GetAppName(string path)
