@@ -43,7 +43,7 @@ namespace Matsukichi
             }
             else
             {
-                uiIconPlace.Image = null;
+                ClearIcon();
             }
 
             ResetCommandSelection();
@@ -119,6 +119,11 @@ namespace Matsukichi
             }
 
             HideMainWindow();
+        }
+
+        private void ClearIcon()
+        {
+            uiIconPlace.Image = null;
         }
     }
 }
