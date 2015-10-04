@@ -45,7 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppInfo.cs" />
+    <Compile Include="Command.cs" />
     <Compile Include="GlobalHotkeyManager.cs" />
     <Compile Include="Implementations.cs">
       <SubType>Form</SubType>

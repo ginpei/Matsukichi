@@ -1,18 +1,56 @@
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using System.Diagnostics;  // Process
-using System.Runtime.InteropServices;  // DllImport
-using System.Drawing;
-using System.IO;
 using Matsukichi.GlobalHotkey;
+using System;
+using System.Windows.Forms;
 
 namespace Matsukichi
 {
     public partial class MainForm : Form
     {
-        private AppList appListCache = new AppList();
-        private AppList filteredAppList = new AppList();
+        public const int MAX_SUGGESTION = 5;
+
+        private FilteredCommandList FilteredCommandList = new FilteredCommandList();
+        RunningAppList RunningAppList = new RunningAppList();
+        StartMenuAppList StartMenuAppList = new StartMenuAppList();
+
+        private void Initialize()
+        {
+            RegisterGlobalHotKey();
+            FilteredCommandList.SetUIItems(uiCommandList.Items);
+            UpdateStartMenuAppList();
+            ShowMainWindow();
+        }
+
+        private void RegisterGlobalHotKey()
+        {
+            GlobalHotkeyManager.RegisterHotKey(Keys.Space, KeyModifiers.Control);
+            GlobalHotkeyManager.HotKeyPressed += new EventHandler<HotKeyEventArgs>(GlobalHotkeyManager_HotKeyPressed);
+            CheckForIllegalCrossThreadCalls = false;  // FIXME
+        }
+
+        private void ShowMainWindow()
+        {
+            uiIconPlace.Image = null;
+            uiFilterText.Clear();
+            uiCommandList.Items.Clear();
+
+            Visible = true;
+            SetForegroundWindow(Handle);
+
+            UpdateRunningAppList();
+        }
+
+        private void HideMainWindow()
+        {
+            Visible = false;
+        }
+
+        private void ResetCommandSelection()
+        {
+            if (uiCommandList.Items.Count > 0)
+            {
+                uiCommandList.SelectedIndex = 0;
+            }
+        }
 
         public MainForm()
         {
@@ -21,15 +59,14 @@ namespace Matsukichi
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            registerHotkeys();
-            UpdateAppList();
+            Initialize();
         }
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
-                OpenApp();
+                RunSelectedCommand();
                 e.SuppressKeyPress = true;
             }
             else if (e.KeyCode == Keys.Escape)
@@ -41,7 +78,7 @@ namespace Matsukichi
                 }
                 else
                 {
-                    Hide();
+                    HideMainWindow();
                 }
                 e.SuppressKeyPress = true;
             }
@@ -49,46 +86,45 @@ namespace Matsukichi
 
         private void uiCommandList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            AppInfo info = filteredAppList[uiCommandList.SelectedIndex];
-            Icon icon = Icon.ExtractAssociatedIcon(info.path);
-            Bitmap bitmap = Bitmap.FromHicon(icon.Handle);
-            uiIconPlace.Image = bitmap;
+            ShowCommandIcon();
         }
 
         private void uiFilterText_TextChanged(object sender, EventArgs e)
         {
-            FilterAppList(uiFilterText.Text);
-
-            if (uiCommandList.Items.Count > 0)
-            {
-                uiCommandList.SelectedIndex = 0;
-            }
+            FilterAvailableCommandList();
         }
 
         private void uiFilterText_KeyDown(object sender, KeyEventArgs e)
         {
+            // Up
+            // C-K
             if (e.KeyCode == Keys.Up || (e.Control && e.KeyCode == Keys.K))
             {
                 SelectPrevCommand();
                 e.SuppressKeyPress = true;
             }
+            // Down
+            // C-J
             else if (e.KeyCode == Keys.Down || (e.Control && e.KeyCode == Keys.J))
             {
                 SelectNextCommand();
                 e.SuppressKeyPress = true;
             }
+            // C-M
+            // (Enter is specified at MainForm_KeyDown())
             else if (e.Control && e.KeyCode == Keys.M)
             {
-                OpenApp();
+                RunSelectedCommand();
                 e.SuppressKeyPress = true;
             }
         }
 
         public void GlobalHotkeyManager_HotKeyPressed(object sender, HotKeyEventArgs e)
         {
+            // C-Space
             if (e.Modifiers == KeyModifiers.Control && e.Key == Keys.Space)
             {
-                Show();
+                ShowMainWindow();
             }
         }
     }

@@ -1,11 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using System.Diagnostics;  // Process
-using System.Runtime.InteropServices;  // DllImport
+using System.Diagnostics;
 using System.Drawing;
-using System.IO;
-using Matsukichi.GlobalHotkey;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace Matsukichi
 {
@@ -15,92 +12,77 @@ namespace Matsukichi
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool SetForegroundWindow(IntPtr hWnd);
 
-        private void registerHotkeys()
+        private void UpdateRunningAppList()
         {
-            GlobalHotkeyManager.RegisterHotKey(Keys.Space, KeyModifiers.Control);
-            GlobalHotkeyManager.HotKeyPressed += new EventHandler<HotKeyEventArgs>(GlobalHotkeyManager_HotKeyPressed);
-            CheckForIllegalCrossThreadCalls = false;  // FIXME
+            RunningAppList.Update(Process.GetProcesses());
+            FilterAvailableCommandList();
         }
 
-        private void Show()
+        private void UpdateStartMenuAppList()
         {
-            Visible = true;
-            SetForegroundWindow(Handle);
-            uiIconPlace.Image = null;
-            uiCommandList.Items.Clear();
-            UpdateAppList();
+            StartMenuAppList.Update();
+            FilterAvailableCommandList();
         }
 
-        private void Hide()
+        private void FilterAvailableCommandList(string text=null)
         {
-            Visible = false;
-        }
+            FilteredCommandList.Clear();
 
-        private void UpdateAppList()
-        {
-            uiCommandList.Items.Add("(updating...)");
-
-            appListCache.Clear();
-
-            UpdateCurrentAppList();
-
-            UpdateInstalledAppList();
-
-            FilterAppList(uiFilterText.Text);
-        }
-
-        private void UpdateCurrentAppList()
-        {
-            foreach (Process p in Process.GetProcesses())
+            if (text == null)
             {
-                if (AppInfo.IsValid(p))
+                text = uiFilterText.Text;
+            }
+
+            if (text.Length > 0)
+            {
+
+                int loopCount = 0;
+                string loweredText = text.ToLower();
+                loopCount = AddNecessaryCommand(loopCount, loweredText, RunningAppList);
+                loopCount = AddNecessaryCommand(loopCount, loweredText, StartMenuAppList);
+            }
+            else
+            {
+                uiIconPlace.Image = null;
+            }
+
+            ResetCommandSelection();
+        }
+
+        private int AddNecessaryCommand(int loopCount, string loweredText, CommandList list)
+        {
+            foreach (CommandItem app in list.Filter(loweredText))
+            {
+                if (loopCount++ >= MAX_SUGGESTION)
                 {
-                    AppInfo app = new AppInfo(p);
-                    if (!String.IsNullOrEmpty(app.screenName))
-                    {
-                        appListCache.Add(app);
-                    }
+                    break;
                 }
+                FilteredCommandList.Add(app);
             }
+
+            return loopCount;
         }
 
-        private void UpdateInstalledAppList()
+        private void ShowCommandIcon()
         {
-            // get all paths of link
-            AddAppsFromShortcuts(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu));
-            AddAppsFromShortcuts(Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu));
+            CommandItem command = GetSelectedCommand();
+            Icon icon = Icon.ExtractAssociatedIcon(command.Path);
+            Bitmap bitmap = Bitmap.FromHicon(icon.Handle);
+
+            uiIconPlace.Image = bitmap;
         }
 
-        private void AddAppsFromShortcuts(string dir)
+        private CommandItem GetSelectedCommand()
         {
-            string[] lnkPaths = Directory.GetFiles(dir + "\\Programs", "*.lnk", SearchOption.AllDirectories);
+            CommandItem command = null;
+            int index = uiCommandList.SelectedIndex;
 
-            // add apps to the list if a link heads to an exe file
-            foreach (string linkPath in lnkPaths)
+            if (index >= 0)
             {
-                AppInfo app = new AppInfo(linkPath);
-                appListCache.Add(app);
-            }
-        }
-
-        private void FilterAppList(string filter)
-        {
-            uiCommandList.Items.Clear();
-            filteredAppList.Clear();
-
-            foreach (AppInfo app in appListCache)
-            {
-                if (app.IsMatch(filter))
-                {
-                    filteredAppList.Add(app);
-                    uiCommandList.Items.Add(app.screenName);
-                }
+                command = FilteredCommandList[index];
             }
 
-            if (uiCommandList.Items.Count > 0)
-            {
-                uiCommandList.SelectedIndex = 0;
-            }
+            return command;
         }
 
         private void SelectPrevCommand()
@@ -119,14 +101,24 @@ namespace Matsukichi
             }
         }
 
-        private void OpenApp()
+        private void RunSelectedCommand()
         {
-            if (uiCommandList.SelectedIndex >= 0)
+            CommandItem command = GetSelectedCommand();
+            if (command != null)
             {
-                filteredAppList[uiCommandList.SelectedIndex].Focus();
+                try
+                {
+                    command.Run();
+                }
+                catch (System.ComponentModel.Win32Exception)
+                {
+                    string title = "Matsukichi (´・ω・`)";
+                    string message = string.Format("Failed to start app: {0}", command.ScreenName);
+                    MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
-            uiFilterText.Text = "";
-            Hide();
+
+            HideMainWindow();
         }
     }
 }
