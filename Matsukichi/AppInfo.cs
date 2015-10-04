@@ -4,7 +4,7 @@ using System.Diagnostics;  // Process
 using System.Management;  // ManagementObjectSearcher (System.Management.dll)
 using System.Runtime.InteropServices;  // DllImport
 using System.Windows.Forms;
-
+using System.IO;
 
 namespace Matsukichi
 {
@@ -14,6 +14,41 @@ namespace Matsukichi
         public string AppName;
         public string ScreenName;
 
+        protected void SetByPath(string path)
+        {
+            Path = path;
+            ScreenName = GetAppName(Path);
+            if (!string.IsNullOrEmpty(ScreenName))
+            {
+                AppName = ScreenName.ToLower();
+            }
+        }
+
+        private string GetAppName(string path)
+        {
+            string name = null;
+
+            if (path.EndsWith(".lnk"))
+            {
+                name = System.IO.Path.GetFileName(path);
+                name = name.Substring(0, name.Length - 4);
+                return name;
+            }
+
+            try
+            {
+                // 'System.IO.FileNotFoundException' when path is "C:\\WINDOWS\\system32\\ApplicationFrameHost.exe"
+                FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(path);
+                name = myFileVersionInfo.FileDescription;
+
+                return name;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         internal bool IsMatch(string loweredText)
         {
             if (string.IsNullOrEmpty(ScreenName))
@@ -21,15 +56,20 @@ namespace Matsukichi
                 return false;
             }
 
-            if (Path.IndexOf(loweredText) < 1)
+            if (Path.ToLower().IndexOf(loweredText) >= 0)
             {
-                return false;
+                return true;
             }
 
-            return true;
+            if (ScreenName.ToLower().IndexOf(loweredText) >= 0)
+            {
+                return true;
+            }
+
+            return false;
         }
 
-        internal void Run()
+        virtual public void Run()
         {
             throw new NotImplementedException();
         }
@@ -198,6 +238,20 @@ namespace Matsukichi
 
     public partial class CommandList : System.Collections.Generic.List<CommandItem>
     {
+        virtual public CommandList Filter(string loweredText)
+        {
+            CommandList list = new CommandList();
+
+            foreach (CommandItem app in this)
+            {
+                if (app.IsMatch(loweredText))
+                {
+                    list.Add(app);
+                }
+            }
+
+            return list;
+        }
     }
 
     internal class FilteredCommandList : CommandList
@@ -234,12 +288,8 @@ namespace Matsukichi
         {
             Process = proc;
 
-            Path = GetProcPath(proc);
-            ScreenName = GetAppName(Path);
-            if (!string.IsNullOrEmpty(ScreenName))
-            {
-                AppName = ScreenName.ToLower();
-            }
+            string path = GetProcPath(proc);
+            SetByPath(path);
         }
 
         private string GetProcPath(Process proc)
@@ -259,42 +309,8 @@ namespace Matsukichi
             return path;
         }
 
-        private string GetAppName(string path)
+        override public void Run()
         {
-            string name = null;
-
-            if (path.EndsWith(".lnk"))
-            {
-                name = System.IO.Path.GetFileName(path);
-                name = name.Substring(0, name.Length - 4);
-                return name;
-            }
-
-            try
-            {
-                // 'System.IO.FileNotFoundException' when path is "C:\\WINDOWS\\system32\\ApplicationFrameHost.exe"
-                FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(path);
-                name = myFileVersionInfo.FileDescription;
-
-                return name;
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        public new void Run()
-        {
-            //if (Process == null)
-            //{
-            //    Process proc = new Process();
-            //    proc.StartInfo.FileName = Path;
-            //    proc.Start();
-            //}
-            //else
-            //{
-            //}
             SetForegroundWindow(Process.MainWindowHandle);
         }
     }
@@ -307,7 +323,7 @@ namespace Matsukichi
 
             foreach (Process proc in processes)
             {
-                CommandItem app = createItem(proc);
+                CommandItem app = CreateItem(proc);
                 if (app != null)
                 {
                     Add(app);
@@ -315,7 +331,7 @@ namespace Matsukichi
             }
         }
 
-        private static CommandItem createItem(Process proc)
+        private static CommandItem CreateItem(Process proc)
         {
             CommandItem app = null;
 
@@ -326,20 +342,59 @@ namespace Matsukichi
 
             return app;
         }
+    }
 
-        public CommandList Filter(string loweredText)
+    class AppLinkItem : CommandItem
+    {
+        public AppLinkItem(string path) : base()
         {
-            CommandList list = new CommandList();
+            SetByPath(path);
+        }
 
-            foreach (CommandItem app in this)
+        override public void Run()
+        {
+            Process proc = new Process();
+            proc.StartInfo.FileName = Path;
+            proc.Start();
+        }
+    }
+
+    class StartMenuAppList : CommandList
+    {
+        public void Update()
+        {
+            Clear();
+
+            AddAppsFromShortcuts(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu));
+            AddAppsFromShortcuts(Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu));
+        }
+
+        private void AddAppsFromShortcuts(string dir)
+        {
+            string[] paths = Directory.GetFiles(dir + "\\Programs", "*.lnk", SearchOption.AllDirectories);
+
+            // add apps to the list if a link heads to an exe file
+            foreach (string path in paths)
             {
-                if (app.IsMatch(loweredText))
+                AppLinkItem app = CreateItem(path);
+                if (app != null)
                 {
-                    list.Add(app);
+                    Add(app);
+
                 }
             }
+        }
 
-            return list;
+        private static AppLinkItem CreateItem(string path)
+        {
+            AppLinkItem app = null;
+
+            if (path.Length > 1)
+            {
+                app = new AppLinkItem(path);
+            }
+
+            return app;
         }
     }
 }

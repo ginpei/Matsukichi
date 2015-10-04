@@ -17,11 +17,13 @@ namespace Matsukichi
 
         private FilteredCommandList FilteredCommandList = new FilteredCommandList();
         RunningAppList RunningAppList = new RunningAppList();
+        StartMenuAppList StartMenuAppList = new StartMenuAppList();
 
         private void Initialize()
         {
             RegisterGlobalHotKey();
             FilteredCommandList.SetUIItems(uiCommandList.Items);
+            UpdateStartMenuAppList();
             ShowMainWindow();
         }
 

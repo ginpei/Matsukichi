@@ -21,6 +21,12 @@ namespace Matsukichi
             FilterAvailableCommandList();
         }
 
+        private void UpdateStartMenuAppList()
+        {
+            StartMenuAppList.Update();
+            FilterAvailableCommandList();
+        }
+
         private void FilterAvailableCommandList(string text=null)
         {
             FilteredCommandList.Clear();
@@ -35,14 +41,8 @@ namespace Matsukichi
 
                 int loopCount = 0;
                 string loweredText = text.ToLower();
-                foreach (CommandItem app in RunningAppList.Filter(loweredText))
-                {
-                    FilteredCommandList.Add(app);
-                    if (++loopCount >= MAX_SUGGESTION)
-                    {
-                        break;
-                    }
-                }
+                loopCount = AddNecessaryCommand(loopCount, loweredText, RunningAppList);
+                loopCount = AddNecessaryCommand(loopCount, loweredText, StartMenuAppList);
             }
             else
             {
@@ -50,6 +50,20 @@ namespace Matsukichi
             }
 
             ResetCommandSelection();
+        }
+
+        private int AddNecessaryCommand(int loopCount, string loweredText, CommandList list)
+        {
+            foreach (CommandItem app in list.Filter(loweredText))
+            {
+                if (loopCount++ >= MAX_SUGGESTION)
+                {
+                    break;
+                }
+                FilteredCommandList.Add(app);
+            }
+
+            return loopCount;
         }
 
         private void ShowCommandIcon()
@@ -69,7 +83,6 @@ namespace Matsukichi
             if (index >= 0)
             {
                 command = FilteredCommandList[index];
-
             }
 
             return command;
@@ -93,8 +106,7 @@ namespace Matsukichi
 
         private void RunSelectedCommand()
         {
-            RunningAppItem command = (RunningAppItem)GetSelectedCommand();
-
+            CommandItem command = GetSelectedCommand();
             if (command != null)
             {
                 command.Run();
