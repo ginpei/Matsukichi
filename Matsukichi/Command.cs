@@ -171,7 +171,15 @@ namespace Matsukichi
 
             if (proc.MainWindowTitle.Length > 1)
             {
-                app = new RunningAppItem(proc);
+                try
+                {
+                    app = new RunningAppItem(proc);
+
+                }
+                catch (NullReferenceException)
+                {
+                    // ignore
+                }
             }
 
             return app;
