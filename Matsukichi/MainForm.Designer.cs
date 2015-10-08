@@ -65,6 +65,7 @@ namespace Matsukichi
             this.uiIconPlace.Location = new System.Drawing.Point(11, 13);
             this.uiIconPlace.Name = "uiIconPlace";
             this.uiIconPlace.Size = new System.Drawing.Size(45, 56);
+            this.uiIconPlace.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.uiIconPlace.TabIndex = 2;
             this.uiIconPlace.TabStop = false;
             // 

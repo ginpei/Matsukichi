@@ -128,7 +128,7 @@ namespace Matsukichi
 
         private void ClearIcon()
         {
-            uiIconPlace.Image = null;
+            uiIconPlace.Image = Properties.Resources.AppIcon;
         }
     }
 }
