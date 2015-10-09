@@ -118,12 +118,49 @@ namespace Matsukichi
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool SetForegroundWindow(IntPtr hWnd);
 
-        public RunningAppItem(Process proc) : base()
+        /**
+         * Use `RunningAppItem.build(proc)` instead.
+         */
+        private RunningAppItem(Process proc) : base()
         {
             Process = proc;
 
             string path = GetProcPath(proc);
             SetByPath(path);
+        }
+
+        static public RunningAppItem build(Process proc)
+        {
+            RunningAppItem command = null;
+
+            try
+            {
+                command = new RunningAppItem(proc);
+            }
+            catch (NullReferenceException)
+            {
+                // ignore
+            }
+
+            if (!IsValid(command))
+            {
+                command = null;
+            }
+
+            return command;
+        }
+
+        private static bool IsValid(RunningAppItem command)
+        {
+            using (var appx = Microsoft.Win32.Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Appx"))
+            {
+                var packageRoot = appx.GetValue("PackageRoot");
+                if (command.Path.IndexOf(packageRoot.ToString()) == 0)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         private string GetProcPath(Process proc)
@@ -171,15 +208,7 @@ namespace Matsukichi
 
             if (proc.MainWindowTitle.Length > 1)
             {
-                try
-                {
-                    app = new RunningAppItem(proc);
-
-                }
-                catch (NullReferenceException)
-                {
-                    // ignore
-                }
+                app = RunningAppItem.build(proc);
             }
 
             return app;
