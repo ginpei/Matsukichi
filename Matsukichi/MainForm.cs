@@ -29,14 +29,10 @@ namespace Matsukichi
 
         private void ShowMainWindow()
         {
-            ClearIcon();
-            uiFilterText.Clear();
-            uiCommandList.Items.Clear();
+            UpdateCommandListUI();
 
             Visible = true;
             SetForegroundWindow(Handle);
-
-            UpdateRunningAppList();
         }
 
         private void HideMainWindow()

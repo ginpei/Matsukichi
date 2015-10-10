@@ -12,6 +12,15 @@ namespace Matsukichi
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool SetForegroundWindow(IntPtr hWnd);
 
+        private void UpdateCommandListUI()
+        {
+            ClearIcon();
+            uiFilterText.Clear();
+            uiCommandList.Items.Clear();
+
+            UpdateRunningAppList();
+        }
+
         private void UpdateRunningAppList()
         {
             RunningAppList.Update(Process.GetProcesses());
