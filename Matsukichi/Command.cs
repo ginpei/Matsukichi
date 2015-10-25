@@ -152,6 +152,11 @@ namespace Matsukichi
 
         private static bool IsValid(RunningAppItem command)
         {
+            if (command == null)
+            {
+                return false;
+            }
+
             using (var appx = Microsoft.Win32.Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Appx"))
             {
                 var packageRoot = appx.GetValue("PackageRoot");
