@@ -18,7 +18,9 @@ namespace Matsukichi
             uiFilterText.Clear();
             uiCommandList.Items.Clear();
 
-            UpdateRunningAppList();
+            System.Threading.Tasks.Task.Run(() => {
+               UpdateRunningAppList();
+            });
         }
 
         private void UpdateRunningAppList()
