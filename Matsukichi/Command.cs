@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -113,6 +114,7 @@ namespace Matsukichi
     class RunningAppItem : CommandItem
     {
         public Process Process;
+        static private IDictionary<string, string> processCash = new Dictionary<string, string>();
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -170,17 +172,28 @@ namespace Matsukichi
 
         private string GetProcPath(Process proc)
         {
-            // get process information using WMI (Windows Management Instrumentation)
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher(string.Format(
-                "SELECT ProcessId, ExecutablePath " +
-                "FROM Win32_Process " +
-                "WHERE ProcessId LIKE '{0}'",
-                proc.Id.ToString()
-            ));
-            ManagementObjectCollection searchResult = searcher.Get();
-            ManagementObject procData = searchResult.Cast<ManagementObject>().FirstOrDefault();
+            string path;
 
-            string path = (string)procData["ExecutablePath"];
+            if (processCash.ContainsKey(proc.ProcessName))
+            {
+                path = processCash[proc.ProcessName];
+            }
+            else
+            {
+                // get process information using WMI (Windows Management Instrumentation)
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher(string.Format(
+                    "SELECT ProcessId, ExecutablePath " +
+                    "FROM Win32_Process " +
+                    "WHERE ProcessId LIKE '{0}'",
+                    proc.Id.ToString()
+                ));
+                ManagementObjectCollection searchResult = searcher.Get();
+                ManagementObject procData = searchResult.Cast<ManagementObject>().FirstOrDefault();
+
+                path = (string)procData["ExecutablePath"];
+
+                processCash[proc.ProcessName] = path;
+            }
 
             return path;
         }
