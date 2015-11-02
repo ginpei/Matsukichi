@@ -29,12 +29,10 @@ namespace Matsukichi
 
         private void ShowMainWindow()
         {
-            System.Diagnostics.Debug.WriteLine("ShowMainWindow");
             UpdateCommandListUI();
 
             Visible = true;
             SetForegroundWindow(Handle);
-            System.Diagnostics.Debug.WriteLine("ShowMainWindow2");
         }
 
         private void HideMainWindow()
